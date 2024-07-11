@@ -15,7 +15,7 @@ export default defineConfig(() => {
   return {
     plugins: [react()],
     define: {
-      apiUrl: apiUrl,
+      apiUrl: process.env.VITE_API_URL || "http://localhost:5000",
     },
     server: {
       proxy: {
