@@ -2,7 +2,9 @@ import { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext<any>(null);
 
-const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [username, saveUsername] = useState<string>("");
   const [fullname, saveFullname] = useState<string>("");
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -14,7 +16,7 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!isLogin) {
           const response = await fetch("/api/v1/user", {
             method: "GET",
-            credentials: "include"
+            credentials: "include",
           });
           const data = await response.json();
           // console.log(data);
@@ -27,16 +29,24 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (err) {
         // console.log(err);
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
     fetchData();
   }, []);
 
-  if (isLoading && !isLogin) return <div className=''>Loading..</div>
-
+  if (isLoading && !isLogin) return <div className="">Loading..</div>;
 
   return (
-    <UserContext.Provider value={{ fullname, saveFullname, username, saveUsername, isLogin, setIsLogin }}>
+    <UserContext.Provider
+      value={{
+        fullname,
+        saveFullname,
+        username,
+        saveUsername,
+        isLogin,
+        setIsLogin,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

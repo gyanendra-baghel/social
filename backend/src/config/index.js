@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 const config = {
   port: process.env.PORT || 5000,
   mongoDbUri: process.env.MONGODB_URI,
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
   corsOrigin: process.env.CORS_ORIGIN,
-}
+};
 
 export function validateConfig(config) {
   for (const key of Object.keys(config)) {
@@ -17,6 +17,6 @@ export function validateConfig(config) {
   }
 }
 
-validateConfig(config)
+validateConfig(config);
 
 export default config;

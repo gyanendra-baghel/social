@@ -26,23 +26,29 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     avatar: {
-      type: String
+      type: String,
     },
-    friends: [{
-      type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    }],
-    pendingFriends: [{
-      type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    }],
-    pendingRequests: [{
-      type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    }]
+    friends: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    pendingFriends: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    pendingRequests: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -70,10 +76,9 @@ userSchema.methods.generateAccessToken = function () {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '24h'
+      expiresIn: "24h",
     }
   );
 };
-
 
 export const User = mongoose.model("User", userSchema);

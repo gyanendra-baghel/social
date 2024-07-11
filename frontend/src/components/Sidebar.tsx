@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 import { BoxArrowLeft, ChatFill, HouseFill, UserFill } from "../assets/icons";
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
   return (
@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
         </NavLink>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

@@ -1,8 +1,7 @@
-import React, { useContext } from "react"
-import { Link } from "react-router-dom"
-import WhiteLogo from "../assets/logo-white.png"
-import { UserContext } from "../context/UserContext"
-
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import WhiteLogo from "../assets/logo-white.png";
+import { UserContext } from "../context/UserContext";
 
 const Header: React.FC = () => {
   const { isLogin } = useContext(UserContext);
@@ -14,19 +13,27 @@ const Header: React.FC = () => {
         <p className="font-sans font-bold text-xl ml-2">Social</p>
       </Link>
       <nav>
-        <Link to="/feedback" className="text-white py-2 px-3 font-bold sm:mr-7">Feedback</Link>
+        <Link to="/feedback" className="text-white py-2 px-3 font-bold sm:mr-7">
+          Feedback
+        </Link>
         {isLogin ? (
-          <Link to="/logout" className="bg-orange-500 text-white py-2 px-7 rounded-full font-bold hover:border-orange-600 border-2 border-transparent hover:bg-transparent hover:text-orange-500 mx-2">Logout</Link>
-        ) :
-          (
-            <Link to="/chat" className="bg-orange-500 text-white py-2 px-7 rounded-full font-bold hover:border-orange-600 border-2 border-transparent hover:bg-transparent hover:text-orange-500">
-              Join Now
-            </Link>
-          )
-        }
+          <Link
+            to="/logout"
+            className="bg-orange-500 text-white py-2 px-7 rounded-full font-bold hover:border-orange-600 border-2 border-transparent hover:bg-transparent hover:text-orange-500 mx-2"
+          >
+            Logout
+          </Link>
+        ) : (
+          <Link
+            to="/chat"
+            className="bg-orange-500 text-white py-2 px-7 rounded-full font-bold hover:border-orange-600 border-2 border-transparent hover:bg-transparent hover:text-orange-500"
+          >
+            Join Now
+          </Link>
+        )}
       </nav>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
