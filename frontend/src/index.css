@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: Poppins, 'Roboto', sans-serif;
+    font-size: 16px;
+    margin: auto;
+    color: #fff;
+}
+
+li {
+    margin: 5px;
+    padding: 5px;
+    list-style: none;
+    display: inline;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 15px 10px;
+}
+
+::-webkit-scrollbar {
+    display: hidden;
+    width: 0;
+}
+
+/* Chat Page */
+
+.user-card {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #1b1b1b;
+}
+
+.message {
+    margin: 15px 0;
+    padding: 8px 16px;
+    max-width: 60%;
+    min-width: 15%;
+    background-color: #1b1b1b;
+    overflow-wrap: break-word;
+    width: fit-content;
+    box-shadow: 0 0 32px rgba(0, 0, 0 / 8%), 0 16px 16px -16px rgba(0, 0, 0 / 10%);
+}
+
+.incoming.message {
+    margin-right: auto;
+    border-radius: 20px 20px 0 20px;
+}
+
+.outgoing.message {
+    margin-left: auto;
+    border-radius: 20px 20px 0 20px;
+}
+
+.message .text {
+    font-size: 1rem;
+}
+
+.message .meta {
+    font-size: 10px;
+    opacity: 0.7;
+    text-align: right;
+    color: #777;
+}
+
+.mini-sidebar a.active {
+    color: #fff;
+}
