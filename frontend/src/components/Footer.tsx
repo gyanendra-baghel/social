@@ -22,17 +22,17 @@ const Footer: React.FC = () => {
           <div className="mb-4" id="contact">
             <h2 className="text-lg font-bold mb-2">Follow Us</h2>
             <div className="flex space-x-4">
-              <a href="https://github.com/gyanendra-baghel" className="text-white hover:text-gray-400 transition duration-300" target="_blank"><i></i> Github</a>
-              <a href="https://twitter.com/Gyan_Singh01" className="text-white hover:text-gray-400 transition duration-300" target="_blank"><i className=""></i>Twitter</a>
-              <a href="https://www.linkedin.com/in/gyanendra-baghel" className="text-white hover:text-gray-400 transition duration-300" target="_blank"><i className=""></i>LinkedIn</a>
-              <a href="https://gyanendra-baghel.vercel.app/" className="text-white hover:text-gray-400 transition duration-300" target="_blank"><i className=""></i>Portfolio</a>
+              <a href="https://github.com/gyanendra-baghel" className="text-white hover:text-gray-400 transition duration-300" target="_blank">Github</a>
+              <a href="https://twitter.com/Gyan_Singh01" className="text-white hover:text-gray-400 transition duration-300" target="_blank">Twitter</a>
+              <a href="https://www.linkedin.com/in/gyanendra-baghel" className="text-white hover:text-gray-400 transition duration-300" target="_blank">LinkedIn</a>
+
             </div>
           </div>
         </div>
 
         <div className="mt-8 border-t border-gray-800 pt-4 text-sm text-center">
           <p>&copy; 2024 Social. All rights reserved.</p>
-          <p>Designed by <b className="">Gyanendra Baghel</b></p>
+          <p>Designed by <a href="https://gyanendra-baghel.vercel.app/" className="text-white hover:text-gray-400 transition duration-300 font-bold" target="_blank">Gyanendra Baghel</a></p>
         </div>
       </div>
     </footer>

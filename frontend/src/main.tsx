@@ -16,6 +16,9 @@ import Feedback from './pages/Feedback.tsx'
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
+import { pageView } from './analytics.ts'
+
+pageView();
 
 const router = createBrowserRouter(
   createRoutesFromElements(

@@ -55,14 +55,6 @@ const socketHandler = (server) => {
       if (targetSocketId) {
         io.to(targetSocketId).emit("message", { ...msg, sender: username });
       }
-
-      // // Assuming you want to save the chat messages to the database
-      // try {
-      // //   const chat = new Message({ ...msg, sender: username, receiver: msg.receiver });
-      // //   await chat.save();
-      // } catch (error) {
-      //   console.error("Error saving chat message to the database:", error);
-      // }
     });
 
     socket.on("disconnect", async () => {

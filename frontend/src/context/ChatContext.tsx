@@ -14,12 +14,12 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(() => {
         if (username) {
-            const newSocket = io('http://localhost:5000/', {
+            const newSocket = io('/', {
                 withCredentials: true,
                 reconnectionDelay: 1000 * 5, // defaults to 1000
                 reconnectionDelayMax: 1000 * 10, // defaults to 5000
-                query: { username }
             });
+
             newSocket.on("connect", () => {
                 setSocket(newSocket);
             });
