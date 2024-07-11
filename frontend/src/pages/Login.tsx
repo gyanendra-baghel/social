@@ -22,15 +22,16 @@ const Login: React.FC = () => {
             credentials: "include",
             body: JSON.stringify({ username, password }),
         });
-        if (response.ok) {
+        if (response.status === 200) {
             const data = await response.json();
-            if (response.status == 200) {
-                saveUsername(data.user.username);
-                saveFullname(data.user.fullName);
-                setIsLogin(true);
-                navigate("/chat");
-            }
-            setMessage(data?.message || "Internal Server Error.");
+            saveUsername(data.user.username);
+            saveFullname(data.user.fullName);
+            setIsLogin(true);
+            navigate("/chat");
+        } else if (response.status === 401 || response.status === 400) {
+            const data = await response.json();
+            // console.log(data);
+            setMessage(data.message);
         } else {
             setMessage("Internal Server Error.");
         }

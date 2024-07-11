@@ -44,8 +44,6 @@ const addPendingFriend = async (req, res) => {
 
     const friendUsername = username;
 
-    console.log("friend request: ", friendUsername);
-
     try {
         // Check if the contact user exists
         const friend = await User.findOne({ username: friendUsername });
@@ -123,7 +121,6 @@ const recommendFriends = async (req, res) => {
     const userID = req.user.id;
 
     try {
-        console.log("recommendation accepted");
         const user = await User.findById(userID).populate('friends', 'username fullName');
 
         if (!user) {
@@ -143,11 +140,8 @@ const recommendFriends = async (req, res) => {
         const usersWithRequested = users.map(recommendUser => {
             const isRequested = user.pendingRequests?.includes(recommendUser._id) || false;
 
-            console.log(isRequested, recommendUser._id);
             return { ...recommendUser.toObject(), requested: isRequested };
         });
-
-        console.log(user.usersWithRequested);
 
         res.status(200).json({ users: usersWithRequested });
     } catch (error) {

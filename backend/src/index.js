@@ -13,6 +13,7 @@ connectDB()
     .then(() => {
         server.listen(config.port, () => {
             console.log(`⚙️ Socket and Server is running at port : ${config.port}`);
+            console.log(config);
         })
     })
     .catch((err) => {

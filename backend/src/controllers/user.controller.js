@@ -5,8 +5,6 @@ const registerUser = async (req, res) => {
 
     const { fullName, email, username, password } = req.body
 
-    console.log({ fullName, email, username, password });
-
     if ([fullName, email, username, password].some((field) => typeof field !== "string" || field.trim() === "")) {
         return res.status(400).json({ status: 400, message: "All fields are required" })
     }
@@ -62,8 +60,6 @@ const loginUser = async (req, res) => {
     if (!isPasswordValid) {
         return res.status(401).json({ status: 401, message: "Invalid user credentials" })
     }
-
-    console.log("Username and password matched")
 
     const accessToken = await user.generateAccessToken()
 

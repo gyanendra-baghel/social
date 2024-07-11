@@ -40,9 +40,7 @@ const socketHandler = (server) => {
     //   socket.disconnect(true);
     //   return;
     // }
-    console.log(`User connected: ${username} ${socket.id}`);
     onlineUsers.set(username, socket.id);
-    // console.log(Array.from(onlineUsers.keys()));
 
     socket.on("sendMessage", async (msg) => {
       if (['receiver', 'type', 'content'].some((index) => !msg[index])) {

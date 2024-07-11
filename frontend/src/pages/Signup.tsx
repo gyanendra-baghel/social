@@ -19,14 +19,14 @@ const Signup: React.FC = () => {
             credentials: "include",
             body: JSON.stringify({ fullName, username, email, password }),
         });
-        if (response.ok) {
+        if (response.status === 201) {
+            navigate("/login");
+        } else if (response.status === 409 || response.status === 400) {
             const data = await response.json();
             // console.log(data);
-            setMessage(data.message || "Internal Server Error.");
-            if (data.status == 201) {
-                navigate("/login");
-            }
-        } else {
+            setMessage(data.message);
+        }
+        else {
             setMessage("Internal Server Error.");
         }
     };
