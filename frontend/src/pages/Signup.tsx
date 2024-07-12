@@ -1,8 +1,9 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import config from "../config";
+import { toast } from "react-toastify";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +12,19 @@ const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+
+  useEffect(() => {
+    toast.info("Create two accounts for testing.", {
+      position: "bottom-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

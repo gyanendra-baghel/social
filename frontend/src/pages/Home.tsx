@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import UnderDevelopment from "../components/UnderDevelopment";
 
 function Home() {
   useEffect(() => {
-    toast.info("Don't forgot to fill feedback", {
+    toast.info("Don't forget to fill feedback.", {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -21,6 +22,7 @@ function Home() {
 
   return (
     <>
+      <UnderDevelopment />
       <Header />
       <main className="bg-neutral-800 flex flex-col justify-center items-center pb-10">
         <div className="h-screen flex flex-col justify-center items-center">

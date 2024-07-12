@@ -5,7 +5,6 @@ import { Message } from "../@types/Message";
 import { ArrowLeft, MicIcon } from "../assets/icons";
 import { ChatContext } from "../context/ChatContext";
 import Sidebar from "../components/Sidebar";
-import { toast } from "react-toastify";
 
 function Chat() {
   let { username, fullname } = useContext(UserContext);
@@ -16,17 +15,16 @@ function Chat() {
   const { receiver } = useParams<{ receiver?: string }>();
 
   const navigate = useNavigate();
+  const SpeechRecognition =
+    (window as any).SpeechRecognition ||
+    (window as any).webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    setMicSupported(false);
+  }
 
   const startListening = () => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      setMicSupported(false);
-      return;
-    }
-
+    if (!SpeechRecognition) return;
     const recognition = new SpeechRecognition();
     recognition.onstart = () => {
       setIsListening(true);
@@ -45,17 +43,7 @@ function Chat() {
     socket.on("message", (msg: Message) => {
       saveMessages((prev: Message[]) => [...prev, msg]);
     });
-    toast.info("Create two accounts", {
-      position: "bottom-right",
-      autoClose: 9000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      // transition: Bounce,
-    });
+
     return () => {
       socket.off("message");
     };

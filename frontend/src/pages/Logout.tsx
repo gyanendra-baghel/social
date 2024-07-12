@@ -2,12 +2,24 @@ import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import config from "../config";
+import { toast } from "react-toastify";
 
 function Logout() {
   const { setIsLogin } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    toast.info("Don't forget to fill the feedback.", {
+      position: "bottom-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
     const fetchData = async () => {
       try {
         const response = await fetch(config.apiUrl + "/api/v1/user/logout", {

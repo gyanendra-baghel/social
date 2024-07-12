@@ -1,10 +1,9 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { toast } from "react-toastify";
 import config from "../config";
 
 const Login: React.FC = () => {
@@ -37,19 +36,6 @@ const Login: React.FC = () => {
       setMessage("Internal Server Error.");
     }
   };
-
-  useEffect(() => {
-    toast.info("Don't forgot to fill feedback", {
-      position: "bottom-right",
-      autoClose: 9000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  }, []);
 
   return (
     <>
