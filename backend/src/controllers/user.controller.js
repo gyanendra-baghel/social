@@ -80,6 +80,7 @@ const loginUser = async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "None",
   };
 
   return res.status(200).cookie("accessToken", accessToken, options).json({
@@ -94,6 +95,7 @@ const logoutUser = async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "None",
   };
 
   return res
@@ -168,6 +170,7 @@ const deleteCurrentUser = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      sameSite: "None",
     };
     res.clearCookie("accessToken", options).json({ message: "User deleted" });
   } catch (error) {
