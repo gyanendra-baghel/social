@@ -66,7 +66,11 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [username]);
 
   if (!socket) {
-    return <div className="">Connecting...</div>;
+    return (
+      <div className="h-screen flex justify-center items-center text-5xl font-bold bg-neutral-800">
+        Connecting...
+      </div>
+    );
   }
 
   return (

@@ -35,7 +35,12 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchData();
   }, []);
 
-  if (isLoading && !isLogin) return <div className="">Loading..</div>;
+  if (isLoading && !isLogin)
+    return (
+      <div className="h-screen flex justify-center items-center text-5xl font-bold bg-neutral-800">
+        Loading..
+      </div>
+    );
 
   return (
     <UserContext.Provider
