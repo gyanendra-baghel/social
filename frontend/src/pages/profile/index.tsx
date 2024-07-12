@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import { UserContext } from "../../context/UserContext";
+import config from "../../config";
 
 const Profile: React.FC = () => {
   const { fullname, username } = useContext(UserContext);
@@ -9,7 +10,9 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/v1/user/", { credentials: "include" });
+      const response = await fetch(config.apiUrl + "/api/v1/user/", {
+        credentials: "include",
+      });
       if (response.status == 200) {
         const data = await response.json();
         // console.log(data);

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { UserContext } from "./UserContext";
 import { Message } from "../@types/Message";
+import config from "../config";
 
 export const ChatContext = createContext<any>(null);
 
@@ -16,7 +17,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (username) {
-      const newSocket = io("/", {
+      const newSocket = io(config.apiUrl + "/", {
         withCredentials: true,
         reconnectionDelay: 1000 * 5, // defaults to 1000
         reconnectionDelayMax: 1000 * 10, // defaults to 5000
@@ -35,7 +36,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/v1/friend", {
+        const response = await fetch(config.apiUrl + "/api/v1/friend", {
           method: "GET",
           credentials: "include",
         });
@@ -49,7 +50,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       // chat messages
       try {
-        const response = await fetch("/api/v1/message", {
+        const response = await fetch(config.apiUrl + "/api/v1/message", {
           credentials: "include",
         });
         if (response.status == 200) {

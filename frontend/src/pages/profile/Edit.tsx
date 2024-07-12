@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
+import config from "../../config";
 
 const EditProfile: React.FC = () => {
   const { type } = useParams<{ type?: string }>();
@@ -13,7 +14,7 @@ const EditProfile: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/v1/user/", {
+    const response = await fetch(config.apiUrl + "/api/v1/user/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

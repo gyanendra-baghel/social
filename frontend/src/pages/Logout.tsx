@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import config from "../config";
 
 function Logout() {
   const { setIsLogin } = useContext(UserContext);
@@ -9,7 +10,7 @@ function Logout() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/v1/user/logout", {
+        const response = await fetch(config.apiUrl + "/api/v1/user/logout", {
           method: "POST",
           credentials: "include",
         });

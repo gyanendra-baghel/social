@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import config from "../config";
 
 export const UserContext = createContext<any>(null);
 
@@ -14,7 +15,7 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchData = async () => {
       try {
         if (!isLogin) {
-          const response = await fetch("/api/v1/user", {
+          const response = await fetch(config.apiUrl + "/api/v1/user", {
             method: "GET",
             credentials: "include",
           });

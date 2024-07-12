@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import RequestButton from "./ui/RequestButton";
+import config from "../config";
 
 const FriendRequest: React.FC = () => {
   const [pendingFriends, setPendingFriends] = useState([]);
@@ -8,9 +9,12 @@ const FriendRequest: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/v1/friend/pendings", {
-          credentials: "include",
-        });
+        const response = await fetch(
+          config.apiUrl + "/api/v1/friend/pendings",
+          {
+            credentials: "include",
+          }
+        );
         if (response.status == 200) {
           const data = await response.json();
           // console.log(data.pendingFriends);

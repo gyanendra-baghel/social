@@ -5,6 +5,7 @@ import { UserContext } from "../context/UserContext";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { toast } from "react-toastify";
+import config from "../config";
 
 const Login: React.FC = () => {
   const { saveFullname, saveUsername, setIsLogin } = useContext(UserContext);
@@ -16,7 +17,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/v1/user/login", {
+    const response = await fetch(config.apiUrl + "/api/v1/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

@@ -21,7 +21,7 @@ import Feedback from "./pages/Feedback.tsx";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { pageView } from "./analytics.ts";
+import { pageView } from "./config/analytics.ts";
 
 pageView();
 

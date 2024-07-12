@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import config from "../config";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Signup: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/v1/user/signup", {
+    const response = await fetch(config.apiUrl + "/api/v1/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

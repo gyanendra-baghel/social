@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import RequestButton from "./ui/RequestButton";
+import config from "../config";
 
 const SearchUser: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -9,10 +10,13 @@ const SearchUser: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`/api/v1/friend/recommends`, {
-          method: "POST",
-          credentials: "include",
-        });
+        const response = await fetch(
+          config.apiUrl + "/api/v1/friend/recommends",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
         if (response.status == 200) {
           const data = await response.json();
           // console.log(data.users);
@@ -31,7 +35,9 @@ const SearchUser: React.FC = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `/api/v1/user/search?q=${encodeURIComponent(searchQuery)}`,
+        `${config.apiUrl}/api/v1/user/search?q=${encodeURIComponent(
+          searchQuery
+        )}`,
         { credentials: "include" }
       );
       if (response.status == 200) {
