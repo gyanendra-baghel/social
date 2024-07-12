@@ -14,15 +14,18 @@ export default defineConfig(() => {
 
   return {
     plugins: [react()],
+    define: {
+      apiUrl: JSON.stringify("https://social-5lms.onrender.com"),
+    },
     server: {
       proxy: {
         "/socket.io": {
-          target: apiUrl,
+          target: "https://social-5lms.onrender.com",
           changeOrigin: true,
           ws: true, // enable WebSocket proxying
         },
         "/api": {
-          target: apiUrl,
+          target: "https://social-5lms.onrender.com",
           changeOrigin: true,
         },
       },
