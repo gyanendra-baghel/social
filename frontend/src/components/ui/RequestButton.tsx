@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import config from "../../config";
 
 type Props = {
   className: string;
@@ -12,7 +13,7 @@ const RequestButton: React.FC<Props> = (props) => {
 
   const friendRequest = async () => {
     try {
-      const response = await fetch(`/api/v1/friend/request`, {
+      const response = await fetch(config.apiUrl + `/api/v1/friend/request`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ username }),
