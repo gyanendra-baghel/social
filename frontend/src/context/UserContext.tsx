@@ -19,9 +19,9 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
             method: "GET",
             credentials: "include",
           });
-          const data = await response.json();
           // console.log(data);
           if (response.status == 200) {
+            const data = await response.json();
             setIsLogin(true);
             if (data.username) saveUsername(data.username);
             if (data.fullName) saveFullname(data.fullName);
@@ -33,12 +33,13 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  });
 
   if (isLoading && !isLogin)
     return (
-      <div className="h-screen flex justify-center items-center text-5xl font-bold bg-neutral-800">
-        Loading..
+      <div className="h-screen flex flex-col justify-center items-center text-5xl font-bold bg-neutral-800">
+        <p>Backend Service is Restarting.</p>
+        <p className="text-2xl mt-4">Wait for a minute then reload</p>
       </div>
     );
 

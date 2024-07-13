@@ -13,7 +13,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [messages, saveMessages] = useState<Message[]>([]);
   const [friends, saveFriends] = useState<[]>([]);
 
-  let { username } = useContext(UserContext);
+  const { username } = useContext<{ username: string }>(UserContext);
 
   useEffect(() => {
     if (username) {
