@@ -1,7 +1,7 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import config from "../config";
 
-interface UserContextType {
+export interface UserContextType {
   username: string;
   saveUsername: React.Dispatch<React.SetStateAction<string>>;
   fullname: string;
@@ -11,6 +11,14 @@ interface UserContextType {
 }
 
 export const UserContext = createContext<UserContextType | null>(null);
+
+export const useUserContext = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUserContext must be used within a UserContextProvider");
+  }
+  return context;
+};
 
 const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

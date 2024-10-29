@@ -1,19 +1,27 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { io } from "socket.io-client";
-import { UserContext } from "./UserContext";
-import { Message } from "../@types/Message";
+import { createContext, useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
+import { useUserContext } from "./UserContext";
+import { Message, Friend } from "../@types/Message";
 import config from "../config";
 
-export const ChatContext = createContext<any>(null);
+interface ChatContextType {
+  socket: Socket | null;
+  messages: Message[];
+  saveMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  friends: Friend[];
+  saveFriends: React.Dispatch<React.SetStateAction<Friend[]>>;
+}
+
+export const ChatContext = createContext<ChatContextType | null>(null);
 
 const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, saveMessages] = useState<Message[]>([]);
-  const [friends, saveFriends] = useState<[]>([]);
+  const [friends, saveFriends] = useState<Friend[]>([]);
 
-  const { username } = useContext<{ username: string }>(UserContext);
+  const { username } = useUserContext();
 
   useEffect(() => {
     if (username) {
@@ -31,7 +39,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       if (socket) socket.disconnect();
     };
-  }, [username]);
+  }, [username, socket]);
 
   useEffect(() => {
     const fetchData = async () => {

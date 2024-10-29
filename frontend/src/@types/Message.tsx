@@ -5,3 +5,5 @@ export interface Message {
   type: "text" | "image";
   time: string;
 }
+
+export interface Friend {}
