@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import RequestButton from "./ui/RequestButton";
 import config from "../config";
+import { Friend } from "../@types/Message";
 
 const FriendRequest: React.FC = () => {
   const [pendingFriends, setPendingFriends] = useState([]);
@@ -39,7 +40,7 @@ const FriendRequest: React.FC = () => {
             </p>
           ) : (
             <div className="p-3">
-              {pendingFriends.map((user: any) => (
+              {pendingFriends.map((user: Friend) => (
                 <div
                   key={user.username}
                   className="flex justify-between p-2 m-1 border border-gray-500 rounded-md"

@@ -1,14 +1,13 @@
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import { Message } from "../@types/Message";
+import { Friend, Message } from "../@types/Message";
 import { ArrowLeft, MicIcon } from "../assets/icons";
-import { ChatContext } from "../context/ChatContext";
 import Sidebar from "../components/Sidebar";
+import { useUser, useChat } from "../hooks/index";
 
 function Chat() {
-  let { username, fullname } = useContext(UserContext);
-  const { socket, messages, saveMessages, friends } = useContext(ChatContext);
+  const { username, fullname } = useUser();
+  const { socket, messages, saveMessages, friends } = useChat();
   const [currentInput, setCurrentInput] = useState<string>("");
   const [isListening, setIsListening] = useState(false);
   const [micSupported, setMicSupported] = useState(true);
@@ -40,13 +39,15 @@ function Chat() {
   };
 
   useEffect(() => {
-    socket.on("message", (msg: Message) => {
-      saveMessages((prev: Message[]) => [...prev, msg]);
-    });
+    if (socket) {
+      socket.on("message", (msg: Message) => {
+        saveMessages((prev: Message[]) => [...prev, msg]);
+      });
 
-    return () => {
-      socket.off("message");
-    };
+      return () => {
+        socket.off("message");
+      };
+    }
   }, [socket]);
 
   function sendMessage(e: FormEvent) {
@@ -66,7 +67,7 @@ function Chat() {
         minute: "2-digit",
       }),
     };
-    socket.emit("sendMessage", msg);
+    if (socket) socket.emit("sendMessage", msg);
     console.log({ sender: username, receiver, msg: currentInput });
     saveMessages((prev: Message[]) => [...prev, msg]);
     setCurrentInput("");
@@ -94,7 +95,7 @@ function Chat() {
                 Friends not Available.
               </p>
             )}
-            {friends.map((user: any) => {
+            {friends.map((user: Friend) => {
               return (
                 <Link to={`/chat/${user.username}`} key={user.username}>
                   <div className="user-card">

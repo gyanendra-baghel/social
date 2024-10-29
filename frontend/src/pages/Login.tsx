@@ -1,13 +1,12 @@
 import React, { FormEvent, useState } from "react";
-import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import config from "../config";
+import { useUser } from "../hooks/useUser";
 
 const Login: React.FC = () => {
-  const { saveFullname, saveUsername, setIsLogin } = useContext(UserContext);
+  const { saveFullname, saveUsername, setIsLogin } = useUser();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");

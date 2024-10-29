@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
 import config from "../config";
 import { toast } from "react-toastify";
+import { useUser } from "../hooks/useUser";
 
 function Logout() {
-  const { setIsLogin } = useContext(UserContext);
+  const { setIsLogin } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function Logout() {
           setIsLogin(false);
         }
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     };
     fetchData();

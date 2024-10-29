@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import WhiteLogo from "../assets/logo-white.png";
-import { UserContext } from "../context/UserContext";
+import { useUser } from "../hooks/useUser";
 
 const Header: React.FC = () => {
-  const { isLogin } = useContext(UserContext);
+  const { isLogin } = useUser();
 
   return (
     <header className="bg-black text-center text-white fixed top-0 w-screen shadow-md z-50">

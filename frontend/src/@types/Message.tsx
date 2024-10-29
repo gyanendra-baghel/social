@@ -6,4 +6,7 @@ export interface Message {
   time: string;
 }
 
-export interface Friend {}
+export interface Friend {
+  username: string;
+  fullName: string;
+}

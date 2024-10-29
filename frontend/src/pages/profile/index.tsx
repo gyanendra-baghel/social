@@ -1,22 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
-import { UserContext } from "../../context/UserContext";
 import config from "../../config";
+import { useUser } from "../../hooks/useUser";
 
 const Profile: React.FC = () => {
-  const { fullname, username } = useContext(UserContext);
+  const { fullname, username } = useUser();
   const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(config.apiUrl + "/api/v1/user/", {
-        credentials: "include",
-      });
-      if (response.status == 200) {
-        const data = await response.json();
-        // console.log(data);
-        setEmail(data.email);
+      try {
+        const response = await fetch(config.apiUrl + "/api/v1/user/", {
+          credentials: "include",
+        });
+        if (response.status == 200) {
+          const data = await response.json();
+          setEmail(data.email);
+        }
+      } catch (err) {
+        console.log(err);
       }
     };
     fetchData();

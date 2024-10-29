@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { useUserContext } from "./UserContext";
 import { Message, Friend } from "../@types/Message";
 import config from "../config";
+import { useUser } from "../hooks/useUser";
 
 interface ChatContextType {
   socket: Socket | null;
@@ -20,8 +20,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, saveMessages] = useState<Message[]>([]);
   const [friends, saveFriends] = useState<Friend[]>([]);
-
-  const { username } = useUserContext();
+  const { username } = useUser();
 
   useEffect(() => {
     if (username) {
