@@ -41,7 +41,7 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsLoading(false);
     };
     fetchData();
-  });
+  }, []);
 
   return (
     <>

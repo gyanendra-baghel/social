@@ -38,7 +38,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       if (socket) socket.disconnect();
     };
-  }, [username, socket]);
+  }, [username]);
 
   useEffect(() => {
     const fetchData = async () => {
