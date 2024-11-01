@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { authenticateToken } from "../services/authService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import {
   loginUser,
   registerUser,
@@ -12,14 +13,14 @@ import {
 
 const router = Router();
 
-router.route("/signup").post(registerUser);
-router.route("/login").post(loginUser);
-router.route("/logout").post(verifyJWT, logoutUser);
-router.route("/search").get(verifyJWT, searchUsers);
+router.route("/signup").post(asyncHandler(registerUser));
+router.route("/login").post(asyncHandler(loginUser));
+router.route("/logout").post(authenticateToken, asyncHandler(logoutUser));
+router.route("/search").get(authenticateToken, asyncHandler(searchUsers));
 router
   .route("/")
-  .get(verifyJWT, getCurrentUser)
-  .post(verifyJWT, updateCurrentUser)
-  .delete(verifyJWT, deleteCurrentUser);
+  .get(authenticateToken, asyncHandler(getCurrentUser))
+  .post(authenticateToken, asyncHandler(updateCurrentUser))
+  .delete(authenticateToken, asyncHandler(deleteCurrentUser));
 
 export default router;

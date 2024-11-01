@@ -1,15 +1,16 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { Message, Friend } from "../@types/Message";
+import { Message, User } from "../@types";
 import config from "../config";
 import { useUser } from "../hooks/useUser";
 
 interface ChatContextType {
   socket: Socket | null;
-  messages: Message[];
-  saveMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-  friends: Friend[];
-  saveFriends: React.Dispatch<React.SetStateAction<Friend[]>>;
+  getMessagesForReceiver: (receiverUsername: string) => Promise<Message[]>;
+  messagesCache: Record<string, Message[]>;
+  saveMessage: (msg: Message) => void;
+  friends: User[];
+  saveFriends: React.Dispatch<React.SetStateAction<User[]>>;
 }
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -18,12 +19,14 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [messages, saveMessages] = useState<Message[]>([]);
-  const [friends, saveFriends] = useState<Friend[]>([]);
-  const { username } = useUser();
+  const [messagesCache, setMessagesCache] = useState<Record<string, Message[]>>(
+    {}
+  );
+  const [friends, saveFriends] = useState<User[]>([]);
+  const { authenticated } = useUser();
 
   useEffect(() => {
-    if (username) {
+    if (authenticated) {
       const newSocket = io(config.apiUrl + "/", {
         withCredentials: true,
         reconnectionDelay: 1000 * 5, // defaults to 1000
@@ -37,42 +40,81 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
     return () => {
       if (socket) socket.disconnect();
+      setSocket(null);
     };
-  }, [username]);
+  }, [authenticated]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFriends = async () => {
+      if (!authenticated) return;
+
       try {
         const response = await fetch(config.apiUrl + "/api/v1/friend", {
           method: "GET",
           credentials: "include",
         });
-        if (response.status == 200) {
-          const data = await response.json();
-          // console.log(data.friends);
-          saveFriends(data.friends);
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) saveFriends(result.data);
         }
-      } catch (err) {
-        console.log(err);
-      }
-      // chat messages
-      try {
-        const response = await fetch(config.apiUrl + "/api/v1/message", {
-          credentials: "include",
-        });
-        if (response.status == 200) {
-          const data = await response.json();
-          // console.log(data);
-          saveMessages(data);
-        }
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.error("Error fetching friends:", error);
       }
     };
-    fetchData();
-  }, [username]);
 
-  if (!socket) {
+    fetchFriends();
+  }, [authenticated]);
+
+  const getMessagesForReceiver = useCallback(
+    async (receiverUsername: string): Promise<Message[]> => {
+      if (messagesCache[receiverUsername]) {
+        return messagesCache[receiverUsername];
+      }
+
+      // Otherwise, fetch messages from the server
+      try {
+        const response = await fetch(`${config.apiUrl}/api/v1/message`, {
+          method: "POST",
+          body: JSON.stringify({ receiver: receiverUsername }),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            const newMessages = result.data;
+
+            // Cache the fetched messages for future requests
+            setMessagesCache((prevCache) => ({
+              ...prevCache,
+              [receiverUsername]: newMessages,
+            }));
+
+            return newMessages;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+
+      return [];
+    },
+    [messagesCache]
+  );
+
+  const saveMessage = (msg: Message) => {
+    setMessagesCache((prevCache) => {
+      const receiver = msg.receiverUsername;
+      const messages = prevCache[receiver] || [];
+      return {
+        ...prevCache,
+        [receiver]: [...messages, msg],
+      };
+    });
+  };
+
+  if (!authenticated) {
     return (
       <div className="h-screen flex justify-center items-center text-5xl font-bold bg-neutral-800">
         Connecting...
@@ -82,7 +124,14 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <ChatContext.Provider
-      value={{ socket, messages, saveMessages, friends, saveFriends }}
+      value={{
+        socket,
+        messagesCache,
+        saveMessage,
+        getMessagesForReceiver,
+        friends,
+        saveFriends,
+      }}
     >
       {children}
     </ChatContext.Provider>

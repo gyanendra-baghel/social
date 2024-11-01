@@ -14,9 +14,11 @@ const Profile: React.FC = () => {
         const response = await fetch(config.apiUrl + "/api/v1/user/", {
           credentials: "include",
         });
-        if (response.status == 200) {
-          const data = await response.json();
-          setEmail(data.email);
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            setEmail(result.data.email);
+          }
         }
       } catch (err) {
         console.log(err);

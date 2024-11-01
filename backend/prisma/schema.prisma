@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  fullname String
+  username String @unique
+  email String
+  password String
+  avatar String?
+  createdAt DateTime @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // relations
+  chats             Chat[]             @relation("UserOneChats") // chats sent by User
+  friendChats       Chat[]             @relation("UserTwoChats") // chats received by User
+  sentFriends       Friend[]           @relation("UserOneFriends") // Friends sent by this user
+  receivedFriends   Friend[]           @relation("UserTwoFriends") // Received Friendship
+  sentMessages      Message[]          @relation("SentMessages") // Relation for messages sent by User
+  
+  @@index([username])
+}
+
+// Message
+
+model Chat {
+  id        Int           @id @default(autoincrement())
+  userOne   User          @relation("UserOneChats", fields: [userOneId], references: [id])
+  userOneId Int
+  userTwo   User          @relation("UserTwoChats", fields: [userTwoId], references: [id])
+  userTwoId Int
+  messages  Message[]
+  createdAt DateTime      @default(now())
+
+  @@unique([userOneId, userTwoId])
+}
+
+model Message {
+  id          Int           @id @default(autoincrement())
+  chat        Chat    @relation(fields: [chatId], references: [id])
+  chatId      Int
+  sender      User          @relation("SentMessages", fields: [senderId], references: [id])
+  senderId    Int
+  content     String
+  messageType MessageType   @default(TEXT)
+  seen        Boolean       @default(false)
+  deleted     Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  FILE
+}
+
+// Relation tables for friends, pendingFriends, and pendingRequests
+model Friend {
+  id          Int       @id @default(autoincrement())
+  user        User      @relation("UserOneFriends", fields: [userId], references: [id])
+  userId      Int
+  friend      User      @relation("UserTwoFriends", fields: [friendId], references: [id])
+  friendId    Int
+  status      FriendshipStatus @default(ACCEPTED)
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+}
+
+enum FriendshipStatus {
+  ACCEPTED
+  PENDING
+  BLOCKED
+  DECLINED
+}

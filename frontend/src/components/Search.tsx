@@ -1,6 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import RequestButton from "./ui/RequestButton";
 import config from "../config";
+import { User } from "../@types";
 
 const SearchUser: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,9 +19,10 @@ const SearchUser: React.FC = () => {
           }
         );
         if (response.status == 200) {
-          const data = await response.json();
-          // console.log(data.users);
-          setRecommandations(data.users);
+          const result = await response.json();
+          if (result.success) {
+            setRecommandations(result.data);
+          }
         } else {
           console.error("Error fetching search results:", response.statusText);
         }
@@ -41,9 +43,10 @@ const SearchUser: React.FC = () => {
         { credentials: "include" }
       );
       if (response.status == 200) {
-        const data = await response.json();
-        console.log(data);
-        setSearchResults(data.users);
+        const result = await response.json();
+        if (result.success) {
+          setSearchResults(result.data);
+        }
       } else {
         console.error("Error fetching search results:", response.statusText);
       }
@@ -85,7 +88,7 @@ const SearchUser: React.FC = () => {
             )
           ) : (
             <div className="flex flex-wrap mx-auto">
-              {searchResults.map((user: any) => (
+              {searchResults.map((user: User) => (
                 <div
                   key={user.username}
                   className="flex justify-between p-2 m-1 border-gray-500 border w-80 rounded"
@@ -96,7 +99,7 @@ const SearchUser: React.FC = () => {
                   </div>
                   <RequestButton
                     className="px-3 bg-black cursor-pointer rounded-lg"
-                    username={user.username}
+                    friend={user.username}
                     initialText={
                       user?.requested == true ? "Requested" : "Request"
                     }
@@ -109,7 +112,7 @@ const SearchUser: React.FC = () => {
             <h2 className="text-3xl font-bold mt-3">Recommandations</h2>
           )}
           <div className="flex flex-wrap mx-auto">
-            {recommandations.map((user: any) => (
+            {recommandations.map((user: User) => (
               <div
                 key={user.username}
                 className="flex justify-between p-2 m-1 border-gray-500 border w-80 rounded"
@@ -120,7 +123,7 @@ const SearchUser: React.FC = () => {
                 </div>
                 <RequestButton
                   className="px-3 bg-black cursor-pointer rounded-lg"
-                  username={user.username}
+                  friend={user.username}
                   initialText={
                     user?.requested == true ? "Requested" : "Request"
                   }

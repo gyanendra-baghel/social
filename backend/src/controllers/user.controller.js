@@ -1,94 +1,55 @@
-import { User } from "../models/user.model.js";
+import { z } from "zod";
+import { authUser } from "../services/authService.js";
+import {
+  getUserById,
+  addUser,
+  deleteUser,
+  searchUser,
+  updateUser,
+} from "../services/userServices.js";
+import { ApiError } from "../utils/ApiError.js";
 
 const registerUser = async (req, res) => {
-  const { fullName, email, username, password } = req.body;
+  const { fullname, email, username, password } = req.body;
+  const userSchema = z.object({
+    fullname: z.string(),
+    email: z.string(),
+    username: z.string(),
+    password: z.string(),
+  });
 
-  if (!fullName || !email || !username || !password) {
-    return res
-      .status(400)
-      .json({ status: 400, message: "All fields are required" });
+  const result = userSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(400, "Please provide valid credentials");
   }
 
-  const existedUser = await User.findOne({ username });
-
-  if (existedUser) {
-    return res
-      .status(409)
-      .json({ status: 409, message: "User with username already exists" });
-  }
-  try {
-    const user = await User.create({
-      fullName,
-      email,
-      password,
-      username: username.toLowerCase(),
-    });
-
-    const createdUser = await User.findById(user._id).select("-password");
-
-    if (!createdUser) {
-      return res.status(500).json({
-        status: 500,
-        message: "Something went wrong while registering the user",
-      });
-    }
-
-    return res.status(201).json({
-      status: 201,
-      user: createdUser,
-      message: "User registered Successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: 500,
-      message: "Internal Server Error",
-    });
-  }
+  const createdUser = await addUser(fullname, username, email, password);
+  return res.sendResponse(201, createdUser, "User created successfully");
 };
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ status: 400, message: "username and passsword is required" });
+  const userSchema = z.object({
+    username: z.string(),
+    password: z.string(),
+  });
+
+  const result = userSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(400, "Please provide username and password");
   }
 
-  const user = await User.findOne({ username });
-
-  if (!user) {
-    return res
-      .status(400)
-      .json({ status: 400, message: "User does not exist" });
-  }
-
-  const isPasswordValid = await user.isPasswordCorrect(password);
-
-  if (!isPasswordValid) {
-    return res
-      .status(401)
-      .json({ status: 401, message: "Invalid user credentials" });
-  }
-
-  const accessToken = await user.generateAccessToken();
-
-  const loggedInUser = await User.findById(user._id).select(
-    "username email fullName friends"
-  );
-
+  const { user, token } = await authUser(username, password);
   const options = {
     httpOnly: true,
     secure: true,
     sameSite: "None",
   };
 
-  return res.status(200).cookie("accessToken", accessToken, options).json({
-    status: 200,
-    user: loggedInUser,
-    accessToken,
-    message: "User logged In Successfully",
-  });
+  return res
+    .cookie("token", token, options)
+    .sendResponse(200, { user, token }, "User logged In Successfully");
 };
 
 const logoutUser = async (req, res) => {
@@ -99,84 +60,59 @@ const logoutUser = async (req, res) => {
   };
 
   return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .json({ message: "User logged Out" });
+    .clearCookie("token", options)
+    .sendResponse(200, null, "User logged out Successfully");
 };
 
 const searchUsers = async (req, res) => {
   const { q } = req.query;
 
-  if (!(typeof q === "string" && q.length > 0))
-    return res.status(200).send({ users: [], message: "Please enter words." });
-  try {
-    const users = await User.find({
-      $or: [
-        { username: { $regex: q, $options: "i" } }, // Case-insensitive username match
-        { fullName: { $regex: q, $options: "i" } }, // Case-insensitive full name match
-      ],
-    })
-      .select("username fullName")
-      .limit(20);
-    res.status(200).json({ users });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
+  const searchSchema = z.object({
+    q: z.string().min(1),
+  });
+
+  const result = searchSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(400, "Please provide input");
   }
+
+  const users = await searchUser(q);
+  return res.sendResponse(200, users, "Search result retrived");
 };
 
 const getCurrentUser = async (req, res) => {
-  const { fullName, username, email } = req.user;
-
-  return res.status(200).json({ fullName, username, email });
+  const user = await getUserById(req.user.id);
+  return res.sendResponse(200, user, "User retrived successfully");
 };
 
-// Update user by ID
 const updateCurrentUser = async (req, res) => {
   const user = req.user;
-  const { fullName, email, password } = req.body;
+  const updatedUser = req.body;
 
-  try {
-    // Update fields
-    if (fullName) user.fullName = fullName;
-    if (password) user.password = password;
-    if (email) user.email = email;
+  //  const userSchema = z.object({
+  //    fullname: z.string(),
+  //    email: z.string(),
+  //    username: z.string(),
+  //    password: z.string(),
+  //  });
 
-    await user.save();
-    res.status(200).json({ user, message: "Crediential Updated" });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
+  //  const result = userSchema.safeParse(req.body);
+  //  if (!result.success) {
+  //    throw new ApiError(400, "Please provide valid credentials");
+  //  }
+
+  updateUser(user, updatedUser);
+  return res.sendResponse(200, user, "Crediential Updated");
 };
 
 // Delete user by ID
 const deleteCurrentUser = async (req, res) => {
   const userId = req.user.id;
-  try {
-    const user = await User.findById(userId);
 
-    // Remove Friend List
-    user.friends.forEach(async (friendId) => {
-      try {
-        await User.findByIdAndUpdate(friendId, { $pull: { friends: user.id } });
-      } catch (error) {
-        console.log(error.message);
-      }
-    });
-    // TODO Delete Messages
-
-    await user.deleteOne();
-    const options = {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-    };
-    res.clearCookie("accessToken", options).json({ message: "User deleted" });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
+  deleteUser(userId);
+  return res
+    .clearCookie("token", options)
+    .sendResponse(200, null, "User deleted");
 };
 
 export {

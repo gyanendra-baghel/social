@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import RequestButton from "./ui/RequestButton";
 import config from "../config";
-import { Friend } from "../@types/Message";
+import { User } from "../@types";
 
 const FriendRequest: React.FC = () => {
   const [pendingFriends, setPendingFriends] = useState([]);
@@ -16,10 +16,13 @@ const FriendRequest: React.FC = () => {
             credentials: "include",
           }
         );
-        if (response.status == 200) {
-          const data = await response.json();
-          // console.log(data.pendingFriends);
-          setPendingFriends(data.pendingFriends);
+        console.log(response);
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+          if (result.success) {
+            setPendingFriends(result.data);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -40,7 +43,7 @@ const FriendRequest: React.FC = () => {
             </p>
           ) : (
             <div className="p-3">
-              {pendingFriends.map((user: Friend) => (
+              {pendingFriends.map((user: User) => (
                 <div
                   key={user.username}
                   className="flex justify-between p-2 m-1 border border-gray-500 rounded-md"
@@ -52,7 +55,7 @@ const FriendRequest: React.FC = () => {
                   <RequestButton
                     className="px-3 bg-black cursor-pointer rounded-lg"
                     initialText="Accept"
-                    username={user.username}
+                    friend={user.username}
                   />
                 </div>
               ))}

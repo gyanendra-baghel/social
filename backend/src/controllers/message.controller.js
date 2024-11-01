@@ -1,52 +1,43 @@
-import { Message } from "../models/message.model.js";
+import { z } from "zod";
+import {
+  getChatMessagesBetweenUsers,
+  saveMessageBySenderAndReceiver,
+} from "../services/messageService.js";
+import { ApiError } from "../utils/ApiError.js";
 
 const getMessages = async (req, res) => {
   const user = req.user;
-  try {
-    const messages = await Message.find({
-      $or: [{ sender: user.username }, { receiver: user.username }],
-    });
-    const formattedMessages = messages.map((message) => ({
-      content: message.content,
-      sender: message.sender,
-      receiver: message.receiver,
-      type: message.type,
-      time: message.createdAt.toLocaleString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    }));
+  const { receiver } = req.body;
 
-    res.status(200).json(formattedMessages);
-  } catch (error) {
-    res.status(500).json({ messages: [], message: "Internal Server Error." });
+  const messageSchema = z.object({
+    receiver: z.string(),
+  });
+
+  const result = messageSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(400, "Please provide receiver");
   }
+
+  const messages = await getChatMessagesBetweenUsers(user.id, receiver);
+  return res.sendResponse(200, messages, "");
 };
 
 const sendMessage = async (req, res) => {
   const sender = req.user;
   let { receiver, content, type } = req.body;
 
-  // if(!isUser(receiver))
-
-  try {
-    const message = new Message({
-      sender: sender.username,
-      receiver,
-      type: type || "text",
-      content,
-    });
-
-    await message.save();
-
-    res.json(message).status(200);
-  } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ message: "Server Error" });
+  const messageSchema = z.object({
+    receiver: z.string(),
+    content: z.string(),
+    type: z.string(),
+  });
+  const result = messageSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(400, "Please provide receiver");
   }
+
+  await saveMessageBySenderAndReceiver(sender.id, receiver, content);
+  return res.sendResponse(200, message, "Message Saved");
 };
 
 export { sendMessage, getMessages };

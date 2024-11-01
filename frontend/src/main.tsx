@@ -19,8 +19,6 @@ import Profile from "./pages/profile/index.tsx";
 import EditProfile from "./pages/profile/Edit.tsx";
 import Feedback from "./pages/Feedback.tsx";
 import "./index.css";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
 import { pageView } from "./config/analytics.ts";
 
 pageView();
@@ -49,18 +47,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <UserContextProvider>
       <RouterProvider router={router} />
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
     </UserContextProvider>
   </React.StrictMode>
 );

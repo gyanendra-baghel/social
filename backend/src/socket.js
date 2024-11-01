@@ -1,9 +1,8 @@
 import { Server } from "socket.io";
 import cookieParser from "socket.io-cookie";
-import { User } from "./models/user.model.js";
 import jwt from "jsonwebtoken";
 import config from "./config/index.js";
-import { saveMessage } from "./utils/messages.js";
+import { saveMessageBySenderAndReceiver } from "./services/messageService.js";
 
 const socketHandler = (server) => {
   const io = new Server(server, {
@@ -16,52 +15,53 @@ const socketHandler = (server) => {
   io.use(cookieParser);
 
   io.use(async (socket, next) => {
-    const token = socket.request.headers.cookie?.accessToken;
+    const token = socket.request.headers.cookie?.token;
+    console.log("Token: ", token);
     if (!token) {
       return next(new Error("Authentication error"));
     }
-    const decodedToken = await jwt.verify(
-      token,
-      process.env.ACCESS_TOKEN_SECRET
-    );
-    const user = await User.findById(decodedToken?._id).select(
-      "-password -refreshToken"
-    );
+    const decodedUser = await jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!user) {
+    if (!decodedUser) {
       return next(new Error("Invalid Access Token"));
     }
 
-    socket.user = user;
+    socket.user = decodedUser;
     next();
   });
 
   const onlineUsers = new Map();
 
   io.on("connection", (socket) => {
+    const userID = socket.user.id;
     const username = socket.user.username;
-    // if (onlineUsers.has(username)) {
-    //   console.log(`User connection rejected: ${username} is already connected. ${socket.id}`);
-    //   socket.disconnect(true);
-    //   return;
-    // }
     onlineUsers.set(username, socket.id);
 
     socket.on("sendMessage", async (msg) => {
-      if (["receiver", "type", "content"].some((index) => !msg[index])) {
-        console.log({ ...msg, sender: username });
-        return;
-      }
-      saveMessage({
-        senderUsername: username,
-        receiverUsername: msg.receiver,
-        type: msg.type,
-        content: msg.content,
-      });
-      // console.log({ ...msg, sender: username });
-      const targetSocketId = onlineUsers.get(msg.receiver);
-      if (targetSocketId) {
-        io.to(targetSocketId).emit("message", { ...msg, sender: username });
+      // console.log("Message: ", msg);
+      try {
+        if (
+          ["receiverUsername", "type", "content"].some((index) => !msg[index])
+        ) {
+          console.log("Invalid message");
+          return;
+        }
+        if (msg.senderUsername !== username) {
+          console.log("Unauthorized sender");
+          return;
+        }
+        await saveMessageBySenderAndReceiver(
+          userID,
+          msg.receiverUsername,
+          msg.content
+        );
+
+        const targetSocketId = onlineUsers.get(msg.receiver);
+        if (targetSocketId) {
+          io.to(targetSocketId).emit("message", { ...msg, sender: username });
+        }
+      } catch (error) {
+        console.error("Error sending message: ", error);
       }
     });
 

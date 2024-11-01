@@ -1,21 +1,25 @@
 import { Router } from "express";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { authenticateToken } from "../services/authService.js";
 import {
-  addFriend,
-  addPendingFriend,
-  getFriends,
-  pendingFriends,
-  recommendFriends,
-  removeFriend,
+  getUserFriends,
+  addUserFriend,
+  removeUserFriend,
+  getPendingRequests,
+  recommendUsers,
 } from "../controllers/friend.controller.js";
 
 const router = Router();
 
-router.route("/").get(verifyJWT, getFriends);
-router.route("/pendings").get(verifyJWT, pendingFriends);
-router.route("/add").post(verifyJWT, addFriend);
-router.route("/request").post(verifyJWT, addPendingFriend);
-router.route("/remove").post(verifyJWT, removeFriend);
-router.route("/recommends").post(verifyJWT, recommendFriends);
+router.route("/").get(authenticateToken, asyncHandler(getUserFriends));
+router.route("/add").post(authenticateToken, asyncHandler(addUserFriend)); // Request and Add Friend
+router.route("/remove").post(authenticateToken, asyncHandler(removeUserFriend));
+router.route("/request").post(authenticateToken, asyncHandler(addUserFriend));
+router
+  .route("/recommends")
+  .post(authenticateToken, asyncHandler(recommendUsers));
+router
+  .route("/pendings")
+  .get(authenticateToken, asyncHandler(getPendingRequests));
 
 export default router;

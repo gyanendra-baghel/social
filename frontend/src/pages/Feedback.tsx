@@ -1,22 +1,7 @@
-import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { toast } from "react-toastify";
 
 const Feedback: React.FC = () => {
-  useEffect(() => {
-    toast.info("Advance Thanks for feedback", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  }, []);
-
   return (
     <>
       <Header />

@@ -1,12 +1,13 @@
 export interface Message {
-  sender: string;
-  receiver: string;
+  senderUsername: string;
+  receiverUsername: string;
   content: string;
   type: "text" | "image";
   time: string;
 }
 
-export interface Friend {
+export interface User {
   username: string;
   fullName: string;
+  requested: undefined | boolean;
 }

@@ -1,47 +1,35 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import config from "../config";
-import { toast } from "react-toastify";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState<string>("");
+  const [fullname, setFullName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
-  useEffect(() => {
-    toast.info("Create two accounts for testing.", {
-      position: "bottom-right",
-      autoClose: 4000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  }, []);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch(config.apiUrl + "/api/v1/user/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ fullName, username, email, password }),
-    });
-    if (response.status === 201) {
-      navigate("/login");
-    } else if (response.status === 409 || response.status === 400) {
-      const data = await response.json();
-      // console.log(data);
-      setMessage(data.message);
-    } else {
-      setMessage("Internal Server Error.");
+    try {
+      const response = await fetch(config.apiUrl + "/api/v1/user/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullname, username, email, password }),
+      });
+
+      if (response.ok) {
+        navigate("/login");
+      } else {
+        const result = await response.json();
+        setMessage(result.message);
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("Something bad happen");
     }
   };
 
@@ -59,7 +47,7 @@ const Signup: React.FC = () => {
             <input
               className="rounded-sm bg-transparent w-full px-4 py-2 my-2 border-gray-500 border outline-none"
               type="text"
-              value={fullName}
+              value={fullname}
               onChange={(e) => {
                 setFullName(e.target.value);
               }}

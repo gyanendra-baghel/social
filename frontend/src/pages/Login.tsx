@@ -6,7 +6,7 @@ import config from "../config";
 import { useUser } from "../hooks/useUser";
 
 const Login: React.FC = () => {
-  const { saveFullname, saveUsername, setIsLogin } = useUser();
+  const { saveFullname, saveUsername, setAuthenticated } = useUser();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -15,24 +15,28 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch(config.apiUrl + "/api/v1/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ username, password }),
-    });
-    if (response.status === 200) {
-      const data = await response.json();
-      saveUsername(data.user.username);
-      saveFullname(data.user.fullName);
-      setIsLogin(true);
-      navigate("/chat");
-    } else if (response.status === 401 || response.status === 400) {
-      const data = await response.json();
-      // console.log(data);
-      setMessage(data.message);
-    } else {
-      setMessage("Internal Server Error.");
+    try {
+      const response = await fetch(config.apiUrl + "/api/v1/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username, password }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        const user = result.data.user;
+        saveUsername(user.username);
+        saveFullname(user.fullname);
+        setAuthenticated(true);
+        navigate("/chat");
+      } else if ([400, 401, 500].includes(response.status)) {
+        setMessage(result.message);
+      } else {
+        setMessage("Something Bad Happen");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("Something Bad Happen");
     }
   };
 

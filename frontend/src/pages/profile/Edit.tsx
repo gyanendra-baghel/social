@@ -25,11 +25,12 @@ const EditProfile: React.FC = () => {
         password: newPassword,
       }),
     });
-    const data = await response.json();
-    // console.log(data);
-    setMessage(data.message || "Internal Server Error.");
-    if (data.status == 201) {
-      navigate("/login");
+    if (response.ok) {
+      const result = await response.json();
+      if (result.success) {
+        setMessage(result.message || "Internal Server Error.");
+        navigate("/login");
+      }
     }
   };
 

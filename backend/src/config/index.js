@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const config = {
+  databaseUrl: process.env.DATABASE_URL,
   port: process.env.PORT || 5000,
-  mongoDbUri: process.env.MONGODB_URI,
-  accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+  jwtSecret: process.env.JWT_SECRET,
   corsOrigin: process.env.CORS_ORIGIN,
 };
 

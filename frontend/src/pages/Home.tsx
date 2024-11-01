@@ -2,24 +2,9 @@ import Header from "../components/Header";
 import Hero from "../assets/hero.png";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
 import UnderDevelopment from "../components/UnderDevelopment";
 
 function Home() {
-  useEffect(() => {
-    toast.info("Don't forget to fill feedback.", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  }, []);
-
   return (
     <>
       <UnderDevelopment />

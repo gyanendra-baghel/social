@@ -4,11 +4,9 @@ import ChatContextProvider from "../context/ChatContext";
 import { useUser } from "../hooks/useUser";
 
 const PrivateRoute: React.FC = () => {
-  const { isLogin } = useUser();
+  const { authenticated } = useUser();
 
-  // return <Outlet/>
-
-  return !isLogin ? (
+  return !authenticated ? (
     <Navigate to="/login" replace={true} />
   ) : (
     <ChatContextProvider>
