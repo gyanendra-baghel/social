@@ -14,11 +14,22 @@ function Chat() {
     saveMessage,
     friends,
     messagesCache,
+    getUserStatus,
   } = useChat();
   const { receiver } = useParams<{ receiver?: string }>();
 
   const [currentInput, setCurrentInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const filtered = friends.sort((a, b) => {
+      if (a.status === "online" && b.status === "offline") return -1;
+      if (a.status === "offline" && b.status === "online") return 1;
+      return 0;
+    });
+    setFilteredUsers(filtered);
+  }, [friends]);
 
   useEffect(() => {
     if (socket) {
@@ -83,7 +94,7 @@ function Chat() {
                 Friends not Available.
               </p>
             ) : (
-              friends.map((user: User, i: number) => (
+              filteredUsers.map((user: User, i: number) => (
                 <Link to={`/chat/${user.username}`} key={user.username + i}>
                   <div className="user-card flex">
                     <ProfileImage firstName={user.fullname} />
@@ -111,7 +122,12 @@ function Chat() {
                   <ArrowLeft width={40} height={40} />
                 </Link>
                 <ProfileImage firstName={receiver} />
-                <h2 className="text-3xl font-semibold ml-2">{receiver}</h2>
+                <h2 className="text-3xl font-semibold ml-2">
+                  {receiver}
+                  <span className="text-xs text-gray-500 font-normal ml-2">
+                    {getUserStatus(receiver)}
+                  </span>
+                </h2>
               </div>
             </div>
             <div className="flex-1 relative overflow-y-scroll overflow-hidden">

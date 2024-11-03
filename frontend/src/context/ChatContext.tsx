@@ -11,6 +11,7 @@ interface ChatContextType {
   saveMessage: (msg: Message, friendUsername: string) => void;
   friends: User[];
   saveFriends: React.Dispatch<React.SetStateAction<User[]>>;
+  getUserStatus: (username: string) => User["status"];
 }
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -37,6 +38,20 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
       newSocket.on("connect", () => {
         setSocket(newSocket);
       });
+      newSocket.on("user-status", (data) => {
+        const { username, status } = data;
+        saveFriends((prevFriends) =>
+          prevFriends.map((friend) => {
+            if (friend.username === username) {
+              return { ...friend, status };
+            }
+            return friend;
+          })
+        );
+        newSocket.on("friends-status", (friendStatus) => {
+          console.log(friendStatus, friends);
+        });
+      });
     }
 
     return () => {
@@ -56,7 +71,13 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         if (response.ok) {
           const result = await response.json();
-          if (result.success) saveFriends(result.data);
+          if (result.success && result.data)
+            saveFriends(
+              (result.data as User[]).map((user: User) => ({
+                ...user,
+                status: "offline",
+              }))
+            );
         }
       } catch (error) {
         console.error("Error fetching friends:", error);
@@ -117,6 +138,11 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
+  const getUserStatus = (username: string) => {
+    const friend = friends.find((user) => user.username === username);
+    return friend?.status || "offline";
+  };
+
   if (!authenticated) {
     return (
       <div className="h-screen flex justify-center items-center text-5xl font-bold bg-neutral-800">
@@ -134,6 +160,7 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
         getMessagesForReceiver,
         friends,
         saveFriends,
+        getUserStatus,
       }}
     >
       {children}

@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import config from "../config";
 import { useUser } from "../hooks/useUser";
+import { useChat } from "../hooks";
 
 function Logout() {
   const { setAuthenticated } = useUser();
+  const { socket } = useChat();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      socket?.disconnect();
       try {
         const response = await fetch(config.apiUrl + "/api/v1/user/logout", {
           method: "POST",

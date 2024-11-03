@@ -10,4 +10,5 @@ export interface User {
   username: string;
   fullname: string;
   requested: undefined | boolean;
+  status: "online" | "offline";
 }
