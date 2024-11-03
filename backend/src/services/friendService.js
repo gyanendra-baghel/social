@@ -8,6 +8,14 @@ export const getFriends = async (userId) => {
       status: FriendshipStatus.ACCEPTED,
     },
     include: {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          fullname: true,
+          avatar: true,
+        },
+      },
       friend: {
         select: {
           id: true,
@@ -19,7 +27,9 @@ export const getFriends = async (userId) => {
     },
   });
 
-  const friendsOnly = friends.map((record) => record.friend);
+  const friendsOnly = friends.map((record) =>
+    record.userId == userId ? record.friend : record.user
+  );
   return friendsOnly;
 };
 
@@ -48,7 +58,12 @@ export const addFriend = async (userId, friendUsername) => {
       existingFriendship.userId != userId
     ) {
       const friendStatus = await prisma.friend.update({
-        where: { id: userId },
+        where: {
+          userId_friendId: {
+            userId: existingFriendship.userId,
+            friendId: existingFriendship.friendId,
+          },
+        },
         data: {
           status: FriendshipStatus.ACCEPTED,
         },
@@ -73,8 +88,6 @@ export const addFriend = async (userId, friendUsername) => {
   } catch (error) {
     throw new ApiError(400, "Friend request failed");
   }
-
-  return friendStatus;
 };
 
 // Remove a friend
@@ -102,12 +115,12 @@ export const getPendingFriends = async (userId) => {
   const pendingFriends = await prisma.friend.findMany({
     where: {
       OR: [
-        { userId: userId, status: FriendshipStatus.PENDING },
+        // { userId: userId, status: FriendshipStatus.PENDING },
         { friendId: userId, status: FriendshipStatus.PENDING },
       ],
     },
     include: {
-      friend: {
+      user: {
         select: {
           username: true,
           fullname: true,
@@ -117,7 +130,7 @@ export const getPendingFriends = async (userId) => {
     },
   });
 
-  const friendsOnly = pendingFriends.map((record) => record.friend);
+  const friendsOnly = pendingFriends.map((record) => record.user);
 
   return friendsOnly;
 };
@@ -139,7 +152,7 @@ export const recommendFriends = async (userId) => {
       username: true,
       fullname: true,
     },
-    take: 20, // Limit results
+    take: 20,
   });
 
   return recommendedUsers;

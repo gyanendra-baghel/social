@@ -49,7 +49,7 @@ const FriendRequest: React.FC = () => {
                   className="flex justify-between p-2 m-1 border border-gray-500 rounded-md"
                 >
                   <div>
-                    <p className="font-bold">{user.fullName}</p>
+                    <p className="font-bold">{user.fullname}</p>
                     <p className="text-sm">{user.username}</p>
                   </div>
                   <RequestButton

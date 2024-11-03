@@ -43,7 +43,7 @@ const socketHandler = (server) => {
         if (
           ["receiverUsername", "type", "content"].some((index) => !msg[index])
         ) {
-          console.log("Invalid message");
+          console.log("Invalid message", msg);
           return;
         }
         if (msg.senderUsername !== username) {
@@ -56,7 +56,8 @@ const socketHandler = (server) => {
           msg.content
         );
 
-        const targetSocketId = onlineUsers.get(msg.receiver);
+        const targetSocketId = onlineUsers.get(msg.receiverUsername);
+        console.log("Target Socket ID: ", targetSocketId);
         if (targetSocketId) {
           io.to(targetSocketId).emit("message", { ...msg, sender: username });
         }

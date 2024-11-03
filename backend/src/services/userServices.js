@@ -26,7 +26,7 @@ export const addUser = async (fullname, username, email, password) => {
   ) {
     throw new ApiError(400, "Username or email already exists");
   }
-  newUser = await prisma.user.create({
+  const newUser = await prisma.user.create({
     data: {
       fullname,
       username,
@@ -63,10 +63,10 @@ export const searchUser = async (query) => {
 
 // Update the current user
 export const updateUser = async (user, updates) => {
-  const { fullName, email, password } = updates;
+  const { fullname, email, password } = updates;
   const data = {};
 
-  if (fullName) data.fullname = fullName;
+  if (fullname) data.fullname = fullname;
   if (email) data.email = email;
   if (password) data.password = await bcrypt.hash(password, 10); // Hash the password if updating
 

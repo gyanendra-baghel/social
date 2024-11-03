@@ -8,6 +8,6 @@ export interface Message {
 
 export interface User {
   username: string;
-  fullName: string;
+  fullname: string;
   requested: undefined | boolean;
 }

@@ -94,7 +94,7 @@ const SearchUser: React.FC = () => {
                   className="flex justify-between p-2 m-1 border-gray-500 border w-80 rounded"
                 >
                   <div>
-                    <p className="font-bold">{user.fullName}</p>
+                    <p className="font-bold">{user.fullname}</p>
                     <p className=" text-xs">{user.username}</p>
                   </div>
                   <RequestButton
@@ -118,7 +118,7 @@ const SearchUser: React.FC = () => {
                 className="flex justify-between p-2 m-1 border-gray-500 border w-80 rounded"
               >
                 <div>
-                  <p className="font-bold">{user.fullName}</p>
+                  <p className="font-bold">{user.fullname}</p>
                   <p className=" text-xs">{user.username}</p>
                 </div>
                 <RequestButton

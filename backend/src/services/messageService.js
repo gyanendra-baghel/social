@@ -47,11 +47,10 @@ export const saveMessageBySenderAndReceiver = async (
         messageType,
       },
     });
+    return message;
   } catch (error) {
     throw new ApiError(400, "Failed to send message");
   }
-
-  return message;
 };
 
 export const getMessages = async (chatId) => {

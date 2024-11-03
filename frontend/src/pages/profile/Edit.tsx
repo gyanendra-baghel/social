@@ -20,7 +20,7 @@ const EditProfile: React.FC = () => {
       credentials: "include",
       body: JSON.stringify({
         currentPassword,
-        fullName: newFullName,
+        fullname: newFullName,
         email: newEmail,
         password: newPassword,
       }),

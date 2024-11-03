@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Message, User } from "../@types";
 import Sidebar from "../components/Sidebar";
 import { useUser, useChat } from "../hooks/index";
+import { ArrowLeft } from "../assets/icons";
 
 function Chat() {
   const { username, fullname } = useUser();
@@ -21,7 +22,7 @@ function Chat() {
   useEffect(() => {
     if (socket) {
       const handleMessage = (msg: Message) => {
-        saveMessage(msg);
+        saveMessage(msg, msg.senderUsername);
       };
 
       socket.on("message", handleMessage);
@@ -55,7 +56,7 @@ function Chat() {
     };
 
     socket?.emit("sendMessage", msg);
-    saveMessage(msg);
+    saveMessage(msg, receiver);
     setCurrentInput("");
   };
 
@@ -84,7 +85,7 @@ function Chat() {
               friends.map((user: User, i: number) => (
                 <Link to={`/chat/${user.username}`} key={user.username + i}>
                   <div className="user-card">
-                    <p>{user.fullName}</p>
+                    <p>{user.fullname}</p>
                     <p className="text-xs">{user.username}</p>
                   </div>
                 </Link>
@@ -101,8 +102,12 @@ function Chat() {
         {receiver ? (
           <>
             <div className="flex justify-between items-center bg-zinc-900 p-2">
-              <h2 className="text-3xl font-semibold">{receiver}</h2>
-              <span className="text-3xl font-semibold">{username}</span>
+              <div className="flex items-center">
+                <Link to="/chat" className="font-bold inline sm:hidden">
+                  <ArrowLeft width={40} height={40} />
+                </Link>
+                <h2 className="text-3xl font-semibold">{receiver}</h2>
+              </div>
             </div>
             <div className="flex-1 relative overflow-y-scroll overflow-hidden">
               <div className="h-full px-2">

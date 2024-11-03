@@ -12,7 +12,10 @@ const Header: React.FC = () => {
         <p className="font-sans font-bold text-xl ml-2">Social</p>
       </Link>
       <nav>
-        <Link to="/feedback" className="text-white py-2 px-3 font-bold sm:mr-7">
+        <Link
+          to="/feedback"
+          className="text-white py-2 px-3 font-bold hidden mr-7 sm:inline"
+        >
           Feedback
         </Link>
         {authenticated ? (

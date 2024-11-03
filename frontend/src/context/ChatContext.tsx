@@ -8,7 +8,7 @@ interface ChatContextType {
   socket: Socket | null;
   getMessagesForReceiver: (receiverUsername: string) => Promise<Message[]>;
   messagesCache: Record<string, Message[]>;
-  saveMessage: (msg: Message) => void;
+  saveMessage: (msg: Message, friendUsername: string) => void;
   friends: User[];
   saveFriends: React.Dispatch<React.SetStateAction<User[]>>;
 }
@@ -103,14 +103,16 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
     [messagesCache]
   );
 
-  const saveMessage = (msg: Message) => {
+  const saveMessage = (msg: Message, friendUsername: string) => {
+    console.log("Message received:", msg);
     setMessagesCache((prevCache) => {
-      const receiver = msg.receiverUsername;
-      const messages = prevCache[receiver] || [];
-      return {
+      const messages = prevCache[friendUsername] || [];
+      const cache = {
         ...prevCache,
-        [receiver]: [...messages, msg],
+        [friendUsername]: [...messages, msg],
       };
+      console.log("Message saved:", cache);
+      return cache;
     });
   };
 

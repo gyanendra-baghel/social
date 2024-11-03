@@ -9,12 +9,12 @@ function Home() {
     <>
       <UnderDevelopment />
       <Header />
-      <main className="bg-neutral-800 flex flex-col justify-center items-center pb-10">
+      <main className="bg-neutral-800 flex flex-col justify-center items-center pb-10 mt-10">
         <div className="h-screen flex flex-col justify-center items-center">
-          <div className="container justify-center lg:p-20 bg-neutral-900 rounded-bl-full px-10 my-12">
+          <div className="container justify-center lg:p-20 bg-neutral-900 rounded-bl-full sm:px-10 my-12">
             <div className="flex items-center mx-auto px-4 py-8 gap-14">
               <div className="">
-                <h2 className="text-6xl font-extrabold mb-4 text-orange-500">
+                <h2 className="text-4xl sm:text-6xl font-extrabold mb-4 text-orange-500">
                   Build <span className="text-orange-600">Network.</span>
                 </h2>
                 <p className="text-white text-xl font-semibold mb-6">
