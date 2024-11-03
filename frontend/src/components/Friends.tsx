@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import RequestButton from "./ui/RequestButton";
 import config from "../config";
 import { User } from "../@types";
+import ProfileImage from "./ProfileImage";
 
 const FriendRequest: React.FC = () => {
   const [pendingFriends, setPendingFriends] = useState([]);
@@ -48,9 +49,12 @@ const FriendRequest: React.FC = () => {
                   key={user.username}
                   className="flex justify-between p-2 m-1 border border-gray-500 rounded-md"
                 >
-                  <div>
-                    <p className="font-bold">{user.fullname}</p>
-                    <p className="text-sm">{user.username}</p>
+                  <div className="flex items-center">
+                    <ProfileImage firstName={user.fullname} />
+                    <div className="ml-2">
+                      <p className="font-bold">{user.fullname}</p>
+                      <p className="text-sm">{user.username}</p>
+                    </div>
                   </div>
                   <RequestButton
                     className="px-3 bg-black cursor-pointer rounded-lg"

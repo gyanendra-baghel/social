@@ -29,8 +29,9 @@ const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
     if (authenticated) {
       const newSocket = io(config.apiUrl + "/", {
         withCredentials: true,
-        reconnectionDelay: 1000 * 5, // defaults to 1000
-        reconnectionDelayMax: 1000 * 10, // defaults to 5000
+        reconnectionDelay: 1000 * 8, // defaults to 1000
+        reconnectionDelayMax: 1000 * 15, // defaults to 5000
+        reconnectionAttempts: 100, // Maximum retries
       });
 
       newSocket.on("connect", () => {

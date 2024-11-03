@@ -4,6 +4,7 @@ import { Message, User } from "../@types";
 import Sidebar from "../components/Sidebar";
 import { useUser, useChat } from "../hooks/index";
 import { ArrowLeft } from "../assets/icons";
+import ProfileImage from "../components/ProfileImage";
 
 function Chat() {
   const { username, fullname } = useUser();
@@ -84,9 +85,12 @@ function Chat() {
             ) : (
               friends.map((user: User, i: number) => (
                 <Link to={`/chat/${user.username}`} key={user.username + i}>
-                  <div className="user-card">
-                    <p>{user.fullname}</p>
-                    <p className="text-xs">{user.username}</p>
+                  <div className="user-card flex">
+                    <ProfileImage firstName={user.fullname} />
+                    <div className="flex-grow ml-2">
+                      <p>{user.fullname}</p>
+                      <p className="text-xs">{user.username}</p>
+                    </div>
                   </div>
                 </Link>
               ))
@@ -106,7 +110,8 @@ function Chat() {
                 <Link to="/chat" className="font-bold inline sm:hidden">
                   <ArrowLeft width={40} height={40} />
                 </Link>
-                <h2 className="text-3xl font-semibold">{receiver}</h2>
+                <ProfileImage firstName={receiver} />
+                <h2 className="text-3xl font-semibold ml-2">{receiver}</h2>
               </div>
             </div>
             <div className="flex-1 relative overflow-y-scroll overflow-hidden">
