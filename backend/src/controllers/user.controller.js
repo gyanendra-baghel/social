@@ -87,22 +87,24 @@ const getCurrentUser = async (req, res) => {
 
 const updateCurrentUser = async (req, res) => {
   const user = req.user;
-  const updatedUser = req.body;
 
-  //  const userSchema = z.object({
-  //    fullname: z.string(),
-  //    email: z.string(),
-  //    username: z.string(),
-  //    password: z.string(),
-  //  });
+  const userSchema = z.object({
+    fullname: z.string().optional(),
+    email: z.string().email().optional(),
+    username: z.string().min(3).optional(),
+    bio: z.string().optional(),
+    public: z.boolean().optional(),
+  });
 
-  //  const result = userSchema.safeParse(req.body);
-  //  if (!result.success) {
-  //    throw new ApiError(400, "Please provide valid credentials");
-  //  }
+  const validationResult = userSchema.safeParse(req.body);
+  if (!validationResult.success) {
+    throw new ApiError(400, "Please provide valid input");
+  }
+  const validData = validationResult.data;
 
-  updateUser(user, updatedUser);
-  return res.sendResponse(200, user, "Crediential Updated");
+  const updatedUser = await updateUser(user.id, validData);
+  console.log(updatedUser);
+  return res.sendResponse(200, updatedUser, "Crediential Updated");
 };
 
 // Delete user by ID

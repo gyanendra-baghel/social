@@ -14,6 +14,8 @@ model User {
   email String
   password String
   avatar String?
+  public Boolean @default(true)
+  bio String?
   createdAt DateTime @default(now())
   updatedAt       DateTime  @updatedAt
 

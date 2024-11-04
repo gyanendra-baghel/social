@@ -11,7 +11,17 @@ export const getUserByUsername = async (username) => {
 };
 
 export const getUserById = async (id) => {
-  const user = await prisma.user.findUnique({ where: { id } });
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      fullname: true,
+      email: true,
+      username: true,
+      bio: true,
+      public: true,
+    },
+  });
   if (!user) {
     throw new Error("User not found");
   }
@@ -62,17 +72,23 @@ export const searchUser = async (query) => {
 };
 
 // Update the current user
-export const updateUser = async (user, updates) => {
-  const { fullname, email, password } = updates;
-  const data = {};
-
-  if (fullname) data.fullname = fullname;
-  if (email) data.email = email;
-  if (password) data.password = await bcrypt.hash(password, 10); // Hash the password if updating
+export const updateUser = async (userId, validData) => {
+  const { password } = validData;
+  if (password) {
+    validData.password = await bcrypt.hash(password, 10); // Hash the password if updating
+  }
 
   const updatedUser = await prisma.user.update({
-    where: { id: user.id },
-    data,
+    where: { id: userId },
+    data: validData,
+    select: {
+      id: true,
+      fullname: true,
+      email: true,
+      username: true,
+      bio: true,
+      public: true,
+    },
   });
 
   return updatedUser;

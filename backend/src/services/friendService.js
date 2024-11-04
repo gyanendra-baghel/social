@@ -144,7 +144,7 @@ export const recommendFriends = async (userId) => {
   const recommendedUsers = await prisma.user.findMany({
     where: {
       AND: [
-        { id: { notIn: [...friendIds, userId] } }, // Exclude current user and existing friends
+        { id: { notIn: [...friendIds, userId] }, public: false }, // Exclude current user and existing friends
       ],
     },
     select: {
