@@ -106,6 +106,55 @@ const socketHandler = (server) => {
     });
     socket.emit("friends-status", friendsStatus);
     console.log(`User connected: ${username}`);
+
+    // Call handler
+    socket.on("call-user", (data) => {
+      const { receiver, peerId } = data;
+      const receiverSocketId = onlineUsers.get(receiver);
+      if (!receiverSocketId) {
+        console.log("User is not online to receive call");
+        return;
+      }
+      io.to(receiverSocketId).emit("call-made", {
+        peerId,
+        caller: username,
+      });
+    });
+    socket.on("call-accept", (data) => {
+      const { caller, callerPeerId, receiverPeerId } = data;
+      const callerSocketId = onlineUsers.get(caller);
+      if (!callerSocketId) {
+        console.log("User is not online to receive call");
+        return;
+      }
+      console.log("Call accepted ", {
+        callerPeerId,
+        receiverPeerId,
+        caller,
+        receiver: username,
+      });
+      io.to(callerSocketId).emit("call-accepted", {
+        callerPeerId,
+        receiverPeerId,
+        caller,
+        receiver: username,
+      });
+      io.to(socket.id).emit("call-accepted", {
+        callerPeerId,
+        receiverPeerId,
+        caller,
+        receiver: username,
+      });
+    });
+    socket.on("call-leave", (data) => {
+      const { peer } = data;
+      const peerSocketId = onlineUsers.get(peer);
+      if (!peerSocketId) {
+        console.log("User is not online to end call");
+        return;
+      }
+      io.to(peerSocketId).emit("call-ended");
+    });
   });
 };
 

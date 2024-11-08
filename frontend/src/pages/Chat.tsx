@@ -3,8 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import { Message, User } from "../@types";
 import Sidebar from "../components/Sidebar";
 import { useUser, useChat } from "../hooks/index";
-import { ArrowLeft } from "../assets/icons";
+import { ArrowLeft, Call } from "../assets/icons";
 import ProfileImage from "../components/ProfileImage";
+import { useCall } from "../hooks/useCall";
 
 function Chat() {
   const { username, fullname } = useUser();
@@ -16,6 +17,7 @@ function Chat() {
     messagesCache,
     getUserStatus,
   } = useChat();
+  const { startCall } = useCall();
   const { receiver } = useParams<{ receiver?: string }>();
 
   const [currentInput, setCurrentInput] = useState<string>("");
@@ -129,6 +131,14 @@ function Chat() {
                   </span>
                 </h2>
               </div>
+              <button
+                className="mr-3"
+                onClick={() => {
+                  startCall(receiver);
+                }}
+              >
+                <Call width={30} height={30} />
+              </button>
             </div>
             <div className="flex-1 relative overflow-y-scroll overflow-hidden">
               <div className="h-full px-2">
