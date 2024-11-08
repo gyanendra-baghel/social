@@ -4,12 +4,14 @@ type VideoPlayerProps = {
   stream: MediaStream | null;
   muted: boolean;
   playing: boolean;
+  hidden?: boolean;
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   stream,
   muted,
   playing,
+  hidden,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -19,7 +21,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   }, [stream]);
 
-  return <video ref={videoRef} autoPlay={playing} muted={muted} />;
+  return (
+    <video
+      ref={videoRef}
+      autoPlay={playing}
+      muted={muted}
+      hidden={hidden == true ? true : false}
+    />
+  );
 };
 
 export default VideoPlayer;

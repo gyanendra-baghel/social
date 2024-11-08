@@ -9,7 +9,7 @@ import { useChat, useUser } from "../hooks";
 import Peer from "peerjs";
 import useMediaStream from "../hooks/useMediaStream";
 import VideoPlayer from "../components/ui/VideoPlayer";
-import { EndCall } from "../assets/icons";
+import { EndCall, MicMute } from "../assets/icons";
 
 export interface CallContextProps {
   isCalling: boolean;
@@ -163,6 +163,8 @@ export const CallContextProvider: React.FC<{ children: ReactNode }> = ({
     });
 
     socket?.on("call-ended", () => {
+      peer?.disconnect();
+      peer?.destroy();
       setIsCalling(false);
       setIsCallAccepted(false);
       stopStream();
@@ -179,17 +181,47 @@ export const CallContextProvider: React.FC<{ children: ReactNode }> = ({
   return (
     <>
       {isIncomingCall && (
-        <div className="fixed bottom-0 right-0 z-50">
-          Incoming call <button onClick={acceptCall}>Accept</button>
+        <div className="fixed bottom-0 right-0 z-50 flex items-center bg-black p-3 px-5 rounded">
+          <p className="mr-10">
+            Incoming call <b>{caller ? `(${caller})` : ""}</b>
+          </p>
+          <button className="bg-orange-500 p-1 rounded-md" onClick={acceptCall}>
+            Accept
+          </button>
         </div>
       )}
       {isCallAccepted && (
-        <div className="fixed bottom-0 right-0 z-50">
-          <VideoPlayer stream={stream} muted={true} playing={true} />
-          <VideoPlayer stream={receiverStream} muted={false} playing={true} />
-          <button onClick={endCall}>
-            <EndCall width={30} height={30} color="red" />
-          </button>
+        <div className="fixed bottom-0 right-0 z-50 bg-black p-2 px-4 rounded-md flex flex-col items-center">
+          <div className="mb-2">
+            In Call <b>{caller ? `(${caller})` : ""}</b>
+          </div>
+          <VideoPlayer
+            stream={stream}
+            muted={true}
+            playing={true}
+            hidden={true}
+          />
+          <VideoPlayer
+            stream={receiverStream}
+            muted={false}
+            playing={true}
+            hidden={true}
+          />
+          <div className="flex justify-between min-w-[200px]">
+            <EndCall
+              width={30}
+              height={30}
+              color="red"
+              className="mx-3"
+              onClick={endCall}
+            />
+            <MicMute
+              width={30}
+              height={30}
+              color="white"
+              className="mx-3 opacity-50"
+            />
+          </div>
         </div>
       )}
       <CallContext.Provider
