@@ -11,7 +11,7 @@ import {
   Send,
   Mic,
   Search,
-  Video,
+  // Video,
   Lock,
   Phone,
   MessageCircle,
@@ -229,9 +229,9 @@ function Chat() {
               </div>
 
               <div className="flex items-center gap-0.5">
-                <button className="p-2 rounded-lg text-slate-600 hover:text-slate-200 hover:bg-white/5 transition-colors">
+                {/* <button className="p-2 rounded-lg text-slate-600 hover:text-slate-200 hover:bg-white/5 transition-colors">
                   <Video size={18} />
-                </button>
+                </button> */}
                 <button
                   className="p-2 rounded-lg text-slate-600 hover:text-slate-200 hover:bg-white/5 transition-colors"
                   onClick={() => startCall(receiver)}
