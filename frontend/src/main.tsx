@@ -14,10 +14,9 @@ import UserContextProvider from "./context/UserContext.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import PrivateRoute from "./utils/PrivateRoute.tsx";
-import Explore from "./pages/Explore.tsx";
+import ConnectionsPage from "./pages/Connections.tsx";
 import Profile from "./pages/profile/index.tsx";
 import EditProfile from "./pages/profile/Edit.tsx";
-import Feedback from "./pages/Feedback.tsx";
 import "./index.css";
 import { pageView } from "./config/analytics.ts";
 
@@ -29,9 +28,8 @@ const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/feedback" element={<Feedback />} />
       <Route path="/" element={<PrivateRoute />}>
-        <Route path="explore" element={<Explore />} />
+        <Route path="connections" element={<ConnectionsPage />} />
         <Route path="chat/:receiver?" element={<Chat />} />
         <Route path="profile" element={<Profile />} />
         <Route path="profile/edit/:type" element={<EditProfile />} />

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 import config from "../../config";
 
 type PersonalInfoProps = {
@@ -7,105 +9,36 @@ type PersonalInfoProps = {
   email: string;
 };
 
-type UpdateUserData = {
-  fullname?: string;
-  email?: string;
-  password?: string;
-};
-
-const PersonalInfo: React.FC<PersonalInfoProps> = (props) => {
-  const [fullname, setFullname] = useState<string>(props.fullname);
-  const [email, setEmail] = useState<string>(props.email);
-  const [password, setPassword] = useState<string>("******");
-  const [editMode, setEditMode] = useState<boolean>(false);
-
-  const handleEdit = async () => {
-    setEditMode((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
-    const updatedData: UpdateUserData = {};
-    if (fullname !== props.fullname && fullname)
-      updatedData.fullname = fullname;
-    if (email !== props.email && email) updatedData.email = email;
-    if (password !== "******" && password) updatedData.password = password;
-    try {
-      const response = await fetch(config.apiUrl + "/api/v1/user", {
-        method: "POST",
-        body: JSON.stringify(updatedData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          console.log(result.data);
-          setPassword("******");
-          setEditMode(false);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+const PersonalInfo: React.FC<PersonalInfoProps> = ({ fullname, username, email }) => {
+  const rows = [
+    { label: "Full Name", value: fullname, editType: "fullname" },
+    { label: "Username", value: `@${username}`, editType: null },
+    { label: "Email", value: email, editType: "email" },
+    { label: "Password", value: "••••••••", editType: "password" },
+  ];
 
   return (
-    <div className="mt-6 bg-neutral-900 p-4 rounded-lg">
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Personal Info</h2>
-        <button className="text-gray-400" onClick={handleEdit}>
-          Edit
-        </button>
+    <div className="glass-card rounded-2xl overflow-hidden">
+      <div className="px-5 py-4 border-b border-white/5">
+        <h2 className="text-sm font-semibold text-slate-200">Personal Info</h2>
       </div>
-      <div className="mt-4">
-        <div className="flex justify-between">
-          <p className="text-gray-400">Full Name</p>
-          <input
-            type="text"
-            value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
-            className="bg-transparent text-right w-1/2"
-            disabled={!editMode}
-          />
-        </div>
-        <div className="flex justify-between mt-2">
-          <p className="text-gray-400">Username</p>
-          <p>{props.username}</p>
-        </div>
-        <div className="flex justify-between mt-2">
-          <p className="text-gray-400">Email</p>
-          <input
-            type="text"
-            value={email || props.email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="bg-transparent text-right w-1/2"
-            disabled={!editMode}
-          />
-        </div>
-        <div className="flex justify-between mt-2">
-          <p className="text-gray-400">Password</p>
-          <input
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onClick={() => setPassword("")}
-            className="bg-transparent text-right w-1/2"
-            disabled={!editMode}
-          />
-        </div>
-        {editMode && (
-          <div className="flex justify-between items-center mt-2">
-            <button
-              className="mt-2 bg-blue-500 text-white p-2 rounded-lg"
-              onClick={handleSubmit}
-            >
-              Save
-            </button>
-            <p className="text-red-800 text-xs">Click on the word</p>
+      <div className="divide-y divide-white/5">
+        {rows.map(({ label, value, editType }) => (
+          <div key={label} className="flex items-center justify-between px-5 py-3.5">
+            <div>
+              <p className="text-xs text-slate-500 mb-0.5">{label}</p>
+              <p className="text-sm text-slate-200">{value || <span className="text-slate-600 italic">Not set</span>}</p>
+            </div>
+            {editType && (
+              <Link
+                to={`/profile/edit/${editType}`}
+                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                Edit <ChevronRight size={14} />
+              </Link>
+            )}
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

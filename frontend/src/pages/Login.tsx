@@ -43,43 +43,47 @@ const Login: React.FC = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-neutral-800 flex justify-center items-center">
-        <div className="bg-neutral-900 p-7 rounded-md w-96 max-w-full">
-          <h1 className="font-bold text-6xl mb-6">Join Now</h1>
-          <form className="w-full text-white" onSubmit={handleSubmit}>
+      <main className="min-h-screen chat-bg flex justify-center items-center px-4">
+        <div className="glass-card p-8 rounded-2xl w-96 max-w-full">
+          <div className="mb-7">
+            <h1 className="font-bold text-4xl text-slate-100 mb-1">
+              Welcome back
+            </h1>
+            <p className="text-slate-500 text-sm">Sign in to your account</p>
+          </div>
+          <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit}>
             <input
-              className="rounded-sm bg-transparent w-full px-4 py-2 my-2 border-gray-500 border outline-none"
+              className="glass-input w-full px-4 py-3 text-sm text-slate-100 placeholder-slate-600 rounded-xl outline-none"
               type="text"
               value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
-              placeholder="Enter username..."
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
               required
               autoFocus
             />
             <input
-              className="rounded-sm bg-transparent w-full px-4 py-2 my-2 border-gray-500 border outline-none"
+              className="glass-input w-full px-4 py-3 text-sm text-slate-100 placeholder-slate-600 rounded-xl outline-none"
               type="password"
               value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              placeholder="Enter Password..."
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
               required
             />
             <button
               type="submit"
-              className="w-full mt-2 bg-orange-500 rounded-full p-2"
+              className="w-full mt-1 bg-blue-600 hover:bg-blue-500 text-white rounded-xl py-3 text-sm font-semibold transition-colors"
+              style={{ boxShadow: "0 0 20px rgba(37,99,235,0.4)" }}
             >
-              Join
+              Sign In
             </button>
-            <p className="text-center text-orange-500 mt-3">{message}</p>
+            {message && (
+              <p className="text-center text-blue-400 text-sm">{message}</p>
+            )}
           </form>
-          <p className="mt-3">
-            If you didn't have account?{" "}
-            <Link to="/signup" className="text-orange-500 underline">
-              Create Account
+          <p className="mt-5 text-slate-500 text-sm text-center">
+            Don&apos;t have an account?{" "}
+            <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium">
+              Create one
             </Link>
           </p>
         </div>

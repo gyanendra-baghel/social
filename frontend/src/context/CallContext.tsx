@@ -9,7 +9,7 @@ import { useChat, useUser } from "../hooks";
 import Peer from "peerjs";
 import useMediaStream from "../hooks/useMediaStream";
 import VideoPlayer from "../components/ui/VideoPlayer";
-import { EndCall, MicMute } from "../assets/icons";
+import { PhoneOff, MicOff } from "lucide-react";
 
 export interface CallContextProps {
   isCalling: boolean;
@@ -181,11 +181,15 @@ export const CallContextProvider: React.FC<{ children: ReactNode }> = ({
   return (
     <>
       {isIncomingCall && (
-        <div className="fixed bottom-0 right-0 z-50 flex items-center bg-black p-3 px-5 rounded">
-          <p className="mr-10">
-            Incoming call <b>{caller ? `(${caller})` : ""}</b>
+        <div className="fixed bottom-4 right-4 z-50 flex items-center glass-card px-5 py-3 rounded-2xl gap-4">
+          <p className="text-sm text-slate-200">
+            Incoming call <b className="text-slate-100">{caller ? `from ${caller}` : ""}</b>
           </p>
-          <button className="bg-orange-500 p-1 rounded-md" onClick={acceptCall}>
+          <button
+            className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors"
+            style={{ boxShadow: "0 0 12px rgba(37,99,235,0.4)" }}
+            onClick={acceptCall}
+          >
             Accept
           </button>
         </div>
@@ -208,16 +212,14 @@ export const CallContextProvider: React.FC<{ children: ReactNode }> = ({
             hidden={true}
           />
           <div className="flex justify-between min-w-[200px]">
-            <EndCall
-              width={30}
-              height={30}
+            <PhoneOff
+              size={30}
               color="red"
-              className="mx-3"
+              className="mx-3 cursor-pointer"
               onClick={endCall}
             />
-            <MicMute
-              width={30}
-              height={30}
+            <MicOff
+              size={30}
               color="white"
               className="mx-3 opacity-50"
             />

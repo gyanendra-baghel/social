@@ -1,104 +1,175 @@
 import Header from "../components/Header";
-import Hero from "../assets/hero.png";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import UnderDevelopment from "../components/UnderDevelopment";
+import { MessageCircle, Users, Shield, Bell, Zap, Phone } from "lucide-react";
 
 function Home() {
   return (
     <>
-      <UnderDevelopment />
       <Header />
-      <main className="bg-neutral-800 flex flex-col justify-center items-center pb-10 mt-10">
-        <div className="h-screen flex flex-col justify-center items-center">
-          <div className="container justify-center lg:p-20 bg-neutral-900 rounded-bl-full sm:px-10 my-12">
-            <div className="flex items-center mx-auto px-4 py-8 gap-14">
-              <div className="">
-                <h2 className="text-4xl sm:text-6xl font-extrabold mb-4 text-orange-500">
-                  Build <span className="text-orange-600">Network.</span>
-                </h2>
-                <p className="text-white text-xl font-semibold mb-6">
-                  With Social, you can build your own network and start chatting
-                  with your loved ones instantly.
-                  <span className="font-sans font-normal">
-                    Our platform empowers you to share moments, exchange ideas,
-                    and stay updated with the people who matter most to you.
-                  </span>{" "}
-                </p>
-                <Link
-                  to="/explore"
-                  className="bg-orange-500 text-white py-2 px-8 rounded-full font-bold hover:border-orange-600 border-2 border-transparent hover:bg-transparent hover:text-orange-500"
-                >
-                  Join Now
-                </Link>
-              </div>
-              <div className="hidden md:flex max-w-xl justify-center items-center">
-                <img src={Hero} className="w-full" />
-              </div>
+      <main className="chat-bg min-h-screen flex flex-col">
+
+        {/* ─── HERO ────────────────────────────────────────── */}
+        <section className="flex flex-col justify-center items-center min-h-screen px-6 text-center">
+          <div className="max-w-2xl lg:max-w-4xl mx-auto">
+            <p className="text-xs lg:text-sm font-semibold uppercase tracking-widest text-slate-500 mb-6 lg:mb-10">
+              Private · Secure · Real-time
+            </p>
+
+            <h1 className="text-5xl sm:text-6xl lg:text-8xl font-extrabold text-slate-100 leading-[1.1] mb-5 lg:mb-8">
+              Connect with people<br />
+              <span className="text-blue-400">who matter.</span>
+            </h1>
+
+            <p className="text-slate-500 text-base sm:text-lg lg:text-xl leading-relaxed mb-10 lg:mb-14 max-w-md lg:max-w-xl mx-auto">
+              Chat, call, and grow your network — all in one private, beautifully crafted place.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center">
+              <Link
+                to="/signup"
+                className="bg-blue-600 hover:bg-blue-500 text-white px-8 lg:px-10 py-3 lg:py-4 rounded-full font-semibold text-sm lg:text-base transition-colors"
+              >
+                Get Started Free
+              </Link>
+              <Link
+                to="/login"
+                className="text-slate-400 hover:text-slate-200 border border-white/10 hover:border-white/20 px-8 lg:px-10 py-3 lg:py-4 rounded-full font-semibold text-sm lg:text-base transition-colors"
+              >
+                Sign In
+              </Link>
             </div>
+
+            <p className="text-xs lg:text-sm text-slate-600 mt-6 lg:mt-8">No ads. No tracking. Just people.</p>
           </div>
-        </div>
-        <hr />
-        <section id="faq" className="bg-neutral-900 py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-8">
-              Frequently Asked Questions
-            </h2>
+        </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="p-6 bg-neutral-800 rounded-lg shadow-md">
-                <h3 className="text-xl text-orange-500 font-semibold mb-2">
-                  How do I sign up for Social?
-                </h3>
-                <p className="text-white">
-                  Signing up for Social is easy! Just click on the "Join Now"
-                  button on the homepage, then "Create Account" and fill in your
-                  details, and you'll be ready to start chatting in no time.
-                </p>
-              </div>
+        {/* ─── FEATURES ────────────────────────────────────── */}
+        <section id="features" className="py-24 px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-100 mb-3">Everything you need</h2>
+              <p className="text-slate-500 text-base">Built for real connections, not just notifications.</p>
+            </div>
 
-              <div className="p-6 bg-neutral-800 rounded-lg shadow-md">
-                <h3 className="text-xl text-orange-500 font-semibold mb-2">
-                  Is my data secure on Social?
-                </h3>
-                <p className="">
-                  Yes, your data is very secure. We use encryption and security
-                  protocols to ensure your conversations and personal
-                  information remain private and protected.
-                </p>
-              </div>
-
-              <div className="p-6 bg-neutral-800 rounded-lg shadow-md">
-                <h3 className="text-xl text-orange-500 font-semibold mb-2">
-                  Can I use Social on multiple devices?
-                </h3>
-                <p className="">
-                  Absolutely! Social is designed to work seamlessly across
-                  multiple devices. You can access your account and continue
-                  your conversations from your phone, tablet, or computer.
-                </p>
-              </div>
-
-              <div className="p-6 bg-neutral-800 rounded-lg shadow-md">
-                <h3 className="text-xl text-orange-500 font-semibold mb-2">
-                  How do I reset my password?
-                </h3>
-                <p className="">
-                  If you've forgotten your password, just click on the "Forgot
-                  Password" link on the login page. Follow the instructions to
-                  reset your password and regain access to your account.
-                </p>
-              </div>
-
-              {/* <div className="p-6 bg-neutral-800 rounded-lg shadow-md">
-                                <h3 className="text-xl font-semibold mb-2">Are there any costs associated with using Social?</h3>
-                                <p className="text-gray-700">Social offers a free plan with essential features. For advanced features and additional benefits, you can upgrade to one of our premium plans. Check out the Pricing section for more details.</p>
-                            </div> */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {[
+                {
+                  icon: <Users size={22} className="text-blue-400" />,
+                  title: "Connections",
+                  desc: "Send connection requests, discover people you may know, and grow your circle.",
+                },
+                {
+                  icon: <MessageCircle size={22} className="text-blue-400" />,
+                  title: "Real-time Chat",
+                  desc: "Instant private messaging with everyone in your network.",
+                },
+                {
+                  icon: <Phone size={22} className="text-blue-400" />,
+                  title: "Audio Calls",
+                  desc: "Peer-to-peer voice calls — no third-party servers, just you and them.",
+                },
+                {
+                  icon: <Bell size={22} className="text-blue-400" />,
+                  title: "Notifications",
+                  desc: "Stay updated on connection requests and new messages instantly.",
+                  badge: "Soon",
+                },
+                {
+                  icon: <Zap size={22} className="text-blue-400" />,
+                  title: "Rich Profiles",
+                  desc: "Build your personal profile with experience, skills, and social links.",
+                  badge: "Soon",
+                },
+                {
+                  icon: <Shield size={22} className="text-blue-400" />,
+                  title: "Private & Secure",
+                  desc: "Your data stays yours. No ads, no tracking, no data selling — ever.",
+                },
+              ].map(({ icon, title, desc, badge }) => (
+                <div
+                  key={title}
+                  className="glass-card rounded-2xl p-6 flex gap-4 items-start hover:border-blue-500/20 transition-colors"
+                >
+                  <div
+                    className="w-10 h-10 flex items-center justify-center rounded-xl flex-shrink-0"
+                    style={{ background: "rgba(37,99,235,0.15)" }}
+                  >
+                    {icon}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-sm font-semibold text-slate-100">{title}</h3>
+                      {badge && (
+                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/25">
+                          {badge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
+
+        {/* ─── FAQ ─────────────────────────────────────────── */}
+        <section id="faq" className="py-20 px-6">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-slate-100 mb-3">Frequently Asked Questions</h2>
+              <p className="text-slate-500 text-sm">Everything you need to know before joining.</p>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {[
+                {
+                  q: "How do I sign up for Social?",
+                  a: "Click \"Get Started Free\" at the top, fill in your name, username, email, and password — and you're in.",
+                },
+                {
+                  q: "Is my data secure on Social?",
+                  a: "Yes. We use encryption and security protocols to keep your conversations and personal information private.",
+                },
+                {
+                  q: "Can I use Social on multiple devices?",
+                  a: "Absolutely. Social works seamlessly across your phone, tablet, and computer.",
+                },
+                {
+                  q: "Can I make voice calls on Social?",
+                  a: "Yes. Social supports peer-to-peer audio calls directly in the app — no plugins or downloads needed.",
+                },
+              ].map(({ q, a }) => (
+                <div key={q} className="glass-card rounded-2xl p-6">
+                  <h3 className="text-sm font-semibold text-blue-400 mb-2">{q}</h3>
+                  <p className="text-sm text-slate-500 leading-relaxed">{a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── CTA BANNER ──────────────────────────────────── */}
+        <section className="py-20 px-6">
+          <div
+            className="max-w-2xl mx-auto glass-card rounded-3xl p-12 text-center"
+            style={{ boxShadow: "0 0 60px rgba(37,99,235,0.10)" }}
+          >
+            <h2 className="text-3xl font-bold text-slate-100 mb-3">Ready to connect?</h2>
+            <p className="text-slate-500 text-sm mb-8">Join thousands of people already on Social.</p>
+            <Link
+              to="/signup"
+              className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-10 py-3.5 rounded-full font-semibold text-sm transition-colors"
+              style={{ boxShadow: "0 0 24px rgba(37,99,235,0.40)" }}
+            >
+              Create Your Account
+            </Link>
+          </div>
+        </section>
+
+        <Footer />
       </main>
-      <Footer />
     </>
   );
 }

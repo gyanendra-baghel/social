@@ -71,7 +71,8 @@ const searchUsers = async (req, res) => {
     q: z.string().min(1),
   });
 
-  const result = searchSchema.safeParse(req.body);
+  const result = searchSchema.safeParse(req.query);
+  console.log(result, q);
   if (!result.success) {
     throw new ApiError(400, "Please provide input");
   }

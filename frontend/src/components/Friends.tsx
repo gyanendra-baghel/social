@@ -33,31 +33,38 @@ const FriendRequest: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex bg-neutral-900 min-h-screen w-full sm:w-96">
+    <div className="flex bg-[#0d0d14] border-r border-white/5 min-h-screen w-full sm:w-[340px] flex-shrink-0">
       <Sidebar />
-      <div className="h-full max-w-md px-4 flex-grow">
-        <h1 className="text-3xl font-bold text-center mt-3">Requests</h1>
-        <div className="">
+      <div className="h-full px-4 flex-grow overflow-y-auto">
+        <div className="flex items-center justify-between py-4 border-b border-white/5 mb-4">
+          <h1 className="text-lg font-semibold text-slate-100">Connection Requests</h1>
+          {pendingFriends.length > 0 && (
+            <span className="bg-blue-600/20 text-blue-400 text-xs font-medium px-2 py-0.5 rounded-full border border-blue-500/30">
+              {pendingFriends.length}
+            </span>
+          )}
+        </div>
+        <div>
           {pendingFriends.length === 0 ? (
-            <p className="text-gray-500 text-sm text-center mt-3">
+            <p className="text-slate-600 text-sm text-center mt-8">
               No pending requests
             </p>
           ) : (
-            <div className="p-3">
+            <div className="flex flex-col gap-2">
               {pendingFriends.map((user: User) => (
                 <div
                   key={user.username}
-                  className="flex justify-between p-2 m-1 border border-gray-500 rounded-md"
+                  className="glass-card flex justify-between items-center p-3 rounded-xl"
                 >
                   <div className="flex items-center">
-                    <ProfileImage firstName={user.fullname} />
-                    <div className="ml-2">
-                      <p className="font-bold">{user.fullname}</p>
-                      <p className="text-sm">{user.username}</p>
+                    <ProfileImage firstName={user.fullname} size={40} />
+                    <div className="ml-3">
+                      <p className="text-sm font-semibold text-slate-100">{user.fullname}</p>
+                      <p className="text-xs text-slate-500">@{user.username}</p>
                     </div>
                   </div>
                   <RequestButton
-                    className="px-3 bg-black cursor-pointer rounded-lg"
+                    className="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-xs font-medium cursor-pointer rounded-lg border border-blue-500/30 transition-colors"
                     initialText="Accept"
                     friend={user.username}
                   />
